@@ -1,0 +1,25 @@
+# Tajne
+.env
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Generisani podaci i indeksi
+data/processed/*
+!data/processed/.gitkeep
+qdrant_data/
+results/*
+!results/.gitkeep
+
+# Keš modela
+.cache/
+models/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini

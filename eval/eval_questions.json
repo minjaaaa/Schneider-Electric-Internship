@@ -1,0 +1,323 @@
+[
+  {
+    "id": "Q01",
+    "question": "What is the hotel cap per night in Singapore?",
+    "expected_answer": "220 EUR",
+    "sources": [
+      "5.2"
+    ],
+    "category": "table"
+  },
+  {
+    "id": "Q02",
+    "question": "What is the current hotel cap for Lisbon?",
+    "expected_answer": "160 EUR for stays from 1 April 2026 (memo PT-2026-02); previously 140 EUR",
+    "sources": [
+      "5.2",
+      "16.2"
+    ],
+    "category": "override"
+  },
+  {
+    "id": "Q03",
+    "question": "Who must approve an expense claim of 3,200 EUR?",
+    "expected_answer": "Line manager and cost-centre owner",
+    "sources": [
+      "Figure 3"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q04",
+    "question": "What is required to buy a service worth 3,200 EUR?",
+    "expected_answer": "Purchase order in ProcureNow with 1 written quote, approved by budget owner",
+    "sources": [
+      "6.1"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q05",
+    "question": "How many days per week can NSS employees work remotely?",
+    "expected_answer": "Up to 3 days since 1 March 2026 (memo PT-2026-04); Tuesday is the office day",
+    "sources": [
+      "3.2",
+      "Figure 7"
+    ],
+    "category": "image+override"
+  },
+  {
+    "id": "Q06",
+    "question": "How many remote days do office-based NSFS employees have?",
+    "expected_answer": "1 day per week",
+    "sources": [
+      "3.2",
+      "Figure 7"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q07",
+    "question": "How many days per year can I work from abroad?",
+    "expected_answer": "20 working days, max. 10 consecutive",
+    "sources": [
+      "3.4"
+    ],
+    "category": "text"
+  },
+  {
+    "id": "Q08",
+    "question": "How much relocation support does NSS offer?",
+    "expected_answer": "Up to 4,000 EUR",
+    "sources": [
+      "3.5"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q09",
+    "question": "How many annual leave days can NSFS employees carry over?",
+    "expected_answer": "Up to 3 days, to be taken by 30 April",
+    "sources": [
+      "4.1"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q10",
+    "question": "How large is the learning budget?",
+    "expected_answer": "1,200 EUR per year; manager approval above 500 EUR",
+    "sources": [
+      "10.2"
+    ],
+    "category": "superseded-trap"
+  },
+  {
+    "id": "Q11",
+    "question": "By when must wellness allowance claims be submitted?",
+    "expected_answer": "By the 15th of the month following the end of the quarter",
+    "sources": [
+      "10.3"
+    ],
+    "category": "text"
+  },
+  {
+    "id": "Q12",
+    "question": "What is the domestic per diem for an overnight trip?",
+    "expected_answer": "35 EUR per day",
+    "sources": [
+      "5.3"
+    ],
+    "category": "superseded-trap"
+  },
+  {
+    "id": "Q13",
+    "question": "What is the name of the guest Wi-Fi in the Prague office?",
+    "expected_answer": "NS-Guest-PRG",
+    "sources": [
+      "Figure 5"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q14",
+    "question": "What is the name of the guest Wi-Fi in the Lisbon office?",
+    "expected_answer": "ABSTAIN - not in the knowledge base",
+    "sources": [],
+    "category": "abstain"
+  },
+  {
+    "id": "Q15",
+    "question": "How many seats does the Orion meeting room have?",
+    "expected_answer": "12 seats (VC equipped)",
+    "sources": [
+      "Figure 6"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q16",
+    "question": "What is the extension of the Security Hotline?",
+    "expected_answer": "ext. 7777",
+    "sources": [
+      "Figure 4"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q17",
+    "question": "What is the badge replacement fee in Krakow?",
+    "expected_answer": "12 EUR",
+    "sources": [
+      "8.4"
+    ],
+    "category": "templated"
+  },
+  {
+    "id": "Q18",
+    "question": "What is the minimum password length for administrator accounts?",
+    "expected_answer": "20 characters",
+    "sources": [
+      "7.1"
+    ],
+    "category": "superseded-trap"
+  },
+  {
+    "id": "Q19",
+    "question": "Can RESTRICTED documents be printed?",
+    "expected_answer": "No, printing is prohibited",
+    "sources": [
+      "Figure 8"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q20",
+    "question": "What is the Premium P1 first response time for Polaris Edge?",
+    "expected_answer": "1 hour (24/7)",
+    "sources": [
+      "Figure 9"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q21",
+    "question": "What is the Standard P1 first response time?",
+    "expected_answer": "4 hours",
+    "sources": [
+      "13.2"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q22",
+    "question": "Which Polaris Cloud version introduced SAML single sign-on?",
+    "expected_answer": "2025.3",
+    "sources": [
+      "13.3"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q23",
+    "question": "What is the limit for gifts received from business partners?",
+    "expected_answer": "50 EUR per gift, 150 EUR per year per partner; register gifts above 25 EUR",
+    "sources": [
+      "11.1"
+    ],
+    "category": "text"
+  },
+  {
+    "id": "Q24",
+    "question": "What is the per-person limit for client entertainment?",
+    "expected_answer": "80 EUR including drinks",
+    "sources": [
+      "5.5"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q25",
+    "question": "What is NorthStar's annual revenue?",
+    "expected_answer": "ABSTAIN - not in the knowledge base",
+    "sources": [],
+    "category": "abstain"
+  },
+  {
+    "id": "Q26",
+    "question": "Which dental insurance provider does NorthStar use?",
+    "expected_answer": "ABSTAIN - not in the knowledge base",
+    "sources": [],
+    "category": "abstain"
+  },
+  {
+    "id": "Q27",
+    "question": "How long is the probation period at NSFS?",
+    "expected_answer": "6 months",
+    "sources": [
+      "2.4"
+    ],
+    "category": "table"
+  },
+  {
+    "id": "Q28",
+    "question": "By which day must mandatory e-learnings be completed?",
+    "expected_answer": "Day 10",
+    "sources": [
+      "Figure 2"
+    ],
+    "category": "image"
+  },
+  {
+    "id": "Q29",
+    "question": "What is the overtime rate for NSFS employees on Sundays?",
+    "expected_answer": "200%",
+    "sources": [
+      "3.3"
+    ],
+    "category": "text"
+  },
+  {
+    "id": "Q30",
+    "question": "Can I bring my dog to the Austin office?",
+    "expected_answer": "No; dogs are allowed only in Lisbon on Fridays",
+    "sources": [
+      "8.1",
+      "8.5",
+      "8.3"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q31",
+    "question": "What does L3 mean?",
+    "expected_answer": "Senior (career level), not a rating or severity",
+    "sources": [
+      "9.2"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q32",
+    "question": "What is the deadline for submitting expense claims?",
+    "expected_answer": "30 days after trip end or purchase",
+    "sources": [
+      "5.6"
+    ],
+    "category": "superseded-trap"
+  },
+  {
+    "id": "Q33",
+    "question": "How long is raw data kept in Polaris Cloud?",
+    "expected_answer": "13 months; aggregates 5 years",
+    "sources": [
+      "13.1"
+    ],
+    "category": "confusable"
+  },
+  {
+    "id": "Q34",
+    "question": "How many weeks of parental leave does a secondary caregiver get?",
+    "expected_answer": "6 weeks",
+    "sources": [
+      "4.3"
+    ],
+    "category": "table"
+  },
+  {
+    "id": "Q35",
+    "question": "What is the parking situation at the Berlin office?",
+    "expected_answer": "ABSTAIN - there is no Berlin office",
+    "sources": [],
+    "category": "abstain"
+  },
+  {
+    "id": "Q36",
+    "question": "By which day must expense approvals be completed to be paid in the next payroll run?",
+    "expected_answer": "By the 20th of the month",
+    "sources": [
+      "Figure 3"
+    ],
+    "category": "image"
+  }
+]

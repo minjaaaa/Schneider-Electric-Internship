@@ -1,0 +1,23 @@
+"""Putanje i osnovna podešavanja projekta."""
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(ROOT / ".env")
+
+DATA_RAW = ROOT / "data" / "raw"
+DATA_PROCESSED = ROOT / "data" / "processed"
+EVAL_DIR = ROOT / "eval"
+RESULTS_DIR = ROOT / "results"
+QDRANT_PATH = ROOT / "qdrant_data"
+
+KB_DOCX = DATA_RAW / "NorthStar_Knowledge_Base.docx"
+EVAL_QUESTIONS = EVAL_DIR / "eval_questions.json"
+
+# Modeli (predlog za prvu nedelju)
+EMBEDDING_MODEL = "BAAI/bge-m3"
+RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+
+for d in (DATA_PROCESSED, RESULTS_DIR):
+    d.mkdir(parents=True, exist_ok=True)

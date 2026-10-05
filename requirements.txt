@@ -1,0 +1,18 @@
+# Parsiranje dokumenata
+docling
+
+# Vektorska baza i pretraga
+qdrant-client
+FlagEmbedding          # BGE-M3 (dense + sparse) i bge-reranker
+sentence-transformers  # alternativni embedding modeli za poređenje
+rank-bm25              # BM25 baseline
+
+# LLM / VLM za opise slika 
+anthropic
+openai
+
+# Analiza i notebook
+pandas
+python-dotenv
+ipykernel
+tqdm
