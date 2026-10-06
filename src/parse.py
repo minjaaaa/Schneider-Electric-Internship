@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import warnings
 import zipfile
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -69,6 +70,9 @@ def extract_figures(docx_path: Path, out_dir: Path) -> list[dict]:
             # Ako je paragraf slike, čuva putanju do slike
             blip = p.find(".//a:blip", NS)
             if blip is not None:
+                if pending_image is not None:
+                    warnings.warn(f"Slika {pending_image} nema naslov 'Figure N:' i biće preskočena "
+                                  f"(sekcija {section}).")
                 pending_image = rid_to_target[blip.get(f"{{{NS['r']}}}embed")] # prevodi "rId10" u "media/image3.png"
                 continue
 
@@ -86,6 +90,8 @@ def extract_figures(docx_path: Path, out_dir: Path) -> list[dict]:
                     "source_file": pending_image,
                 })
                 pending_image = None
+        if pending_image is not None:
+            warnings.warn(f"Poslednja slika {pending_image} nema naslov 'Figure N:' i biće preskočena.")
 
     (out_dir / "figures.json").write_text(json.dumps(figures, indent=2, ensure_ascii=False), encoding="utf-8")
     return figures
