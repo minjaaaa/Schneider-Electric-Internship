@@ -135,9 +135,20 @@ def split_faq(text: str) -> list[str]:
             current = []
         if block:
             current.append(FAQ_Q_RE.sub(r"Q: \1", block))  # uklanja ** i dodaje "Q: " na pocetak pitanja
-    if current:
+                                                           # ako nije bilo pitanje, sub dodaje ceo blok u current
+    if current: # Posle petlje u current ostaje poslednji par
         pairs.append("\n".join(current))
     return [p for p in pairs if p.startswith("Q: ")] or [text]  # ako nema pitanja, vraca ceo tekst kao jedan chunk
+
+"""
+**Q: Can I carry over unused annual leave?**
+
+A: Yes, within limits. NSS employees may carry over up to 5 days ...
+
+**Q: Can I carry over my unused learning budget?**
+
+A: No. The learning budget resets on 1 January. See section 10.2.
+"""
 
 def split_long(text: str, max_words: int) -> list[str]:
     """Deli predugačak tekst po blokovima (pasusima). Tabela je jedan blok, pa se ne seče."""

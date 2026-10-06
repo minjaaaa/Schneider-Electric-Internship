@@ -21,3 +21,10 @@ RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 
 for d in (DATA_PROCESSED, RESULTS_DIR):
     d.mkdir(parents=True, exist_ok=True)
+
+# Memoi koji menjaju pravila iz sekcija (sekcija -> lista memoa).
+# Za sada ručno, kasnije se može izvlačiti automatski iz teksta memoa.
+OVERRIDES = {
+    "3.2": ["PT-2026-04"],
+    "5.2": ["PT-2026-02"],
+}
