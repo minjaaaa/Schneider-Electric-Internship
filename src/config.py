@@ -19,6 +19,8 @@ EVAL_QUESTIONS = EVAL_DIR / "eval_questions.json"
 EMBEDDING_MODEL = "BAAI/bge-m3"
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 
+VLM_MODEL = "gemini-3.5-flash"    # opisi slika preko Gemini API-ja (eksperiment 4)
+
 for d in (DATA_PROCESSED, RESULTS_DIR):
     d.mkdir(parents=True, exist_ok=True)
 

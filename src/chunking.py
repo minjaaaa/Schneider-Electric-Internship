@@ -2,7 +2,7 @@
 
 Dve strategije za poređenje:
   A) fiksna dužina (N reči sa preklapanjem) - baseline
-  B) po sekcijama dokumenta (x.y), FAQ po pitanjima, tabele se nikad ne seku
+  B) po sekcijama dokumenta (x.y), FAp po pitanjima, tabele se nikad ne seku
 """
 from __future__ import annotations
 

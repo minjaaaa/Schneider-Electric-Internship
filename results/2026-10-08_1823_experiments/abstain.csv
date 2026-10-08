@@ -1,0 +1,8 @@
+,mean,mean,max,max
+vrsta,sa odgovorom,bez odgovora,sa odgovorom,bez odgovora
+experiment,,,,
+1_fixed,0.601,0.561,0.736,0.641
+2_section,0.667,0.589,0.783,0.675
+3_section_path,0.661,0.592,0.761,0.681
+3b_section_path_filter,0.661,0.592,0.761,0.681
+4_figures,0.662,0.592,0.761,0.681

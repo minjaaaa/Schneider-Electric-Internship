@@ -8,6 +8,7 @@ sentence-transformers  # alternativni embedding modeli za poređenje
 rank-bm25              # BM25 baseline
 
 # LLM / VLM za opise slika 
+google-genai
 anthropic
 openai
 

@@ -20,9 +20,9 @@ def get_model(name: str = EMBEDDING_MODEL):
 def embed(texts: list[str], model=None) -> list[list[float]]:
     """Pretvara tekstove u normalizovane vektore."""
     model = model or get_model()
-    vectors = model.encode(texts, normalize_embeddings=True, batch_size=16,
+    vectors = model.encode(texts, normalize_embeddings=True, batch_size=16, # obradjuje po 16 tekstova odjednom
                            show_progress_bar=len(texts) > 16) # jedinicni vektori
-    return vectors.tolist()
+    return vectors.tolist() # encode vraca NumPy matricu (broj chunkova x 1024), a Qdrant ocekuje listu
 
 
 def get_client(in_memory: bool = False) -> QdrantClient:
@@ -41,9 +41,9 @@ def build_index(client: QdrantClient, collection: str, chunks: list[dict],
         collection,
         vectors_config=models.VectorParams(size=len(vectors[0]), distance=models.Distance.COSINE),
     )
-    client.upsert(
+    client.upsert( # update + insert, tj. upisuje sve chunk-ove u Qdrant
         collection,
-        points=[models.PointStruct(id=i, vector=v, payload=c)
+        points=[models.PointStruct(id=i, vector=v, payload=c) # jedna tacka u bazi = jedinstven broj, vektor, metapodaci
                 for i, (v, c) in enumerate(zip(vectors, chunks))],
     )
 
@@ -52,10 +52,11 @@ def search(client: QdrantClient, collection: str, query: str, k: int = 10,
            exclude_superseded: bool = False, model=None) -> list[dict]:
     """Vraća k najsličnijih chunk-ova (payload + score), od najboljeg ka najlošijem."""
     query_filter = None
-    if exclude_superseded:
+    if exclude_superseded: # filter za status: superseded
         query_filter = models.Filter(must_not=[
             models.FieldCondition(key="status", match=models.MatchValue(value="superseded"))
         ])
     result = client.query_points(collection, query=embed([query], model)[0], limit=k,
-                                 query_filter=query_filter, with_payload=True)
+                                 query_filter=query_filter, with_payload=True) # vraca i metaodatke chunka
     return [{**p.payload, "score": p.score} for p in result.points]
+    # **p.payload raspakuje sva polja chunka: chunk_id, text, section, sections, section_title, heading_path, type, status, office, overriden_by
