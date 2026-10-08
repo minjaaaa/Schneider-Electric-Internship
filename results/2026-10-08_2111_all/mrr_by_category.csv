@@ -1,0 +1,10 @@
+category,1_fixed,2_section,3_section_path,3b_section_path_filter,4_figures,5_expansion,6_rerank
+table,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+override,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+image,0.0,0.0,0.0,0.0,0.583,0.583,0.938
+confusable,0.889,0.833,0.778,0.778,0.778,0.778,0.889
+image+override,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+text,0.875,0.875,1.0,1.0,1.0,1.0,1.0
+superseded-trap,1.0,0.875,0.875,1.0,1.0,1.0,1.0
+templated,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+multi-hop,1.0,1.0,1.0,1.0,1.0,1.0,1.0

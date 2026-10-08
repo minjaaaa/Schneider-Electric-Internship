@@ -71,14 +71,14 @@ def split_sections(md: str) -> list[dict]:
     return result
 
 # --------------- 3. Chunk-ovanje -------------------
-# Metoda A: fiksna duzina chunk-ova (baseline) i metapodaci koji zavise samo od sekcije (status, office, overriden_by)
+# Metoda A: fiksna duzina chunk-ova (baseline) i metapodaci koji zavise samo od sekcije (status, office, overridden_by)
 
 def section_metadata(section: str, section_title: str) -> dict:
     """ Metapodaci koji zavise samo od broja i naslova sekcije, a ne od teksta. """
     chapter = section.split(".")[0]
     if chapter == "17":
         status = "superseded"
-    elif chapter == "16.2":
+    elif section == "16.2":
         status = "memo"
     else:
         status = "valid"
@@ -86,7 +86,7 @@ def section_metadata(section: str, section_title: str) -> dict:
     office = None
     if chapter == "8" and section != "8" and section != "8.1":
         office = section_title.split()[1]  # "8.3 Lisbon office" -> "Lisbon"
-    return {"status": status, "office": office, "overriden_by": OVERRIDES.get(section, [])}
+    return {"status": status, "office": office, "overridden_by": OVERRIDES.get(section, [])}
 
 def content_type(text: str) -> str:
     """ Ako sadrzi Markdown tabelu - 'table', inace 'text' """

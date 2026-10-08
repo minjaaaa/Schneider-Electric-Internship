@@ -12,8 +12,7 @@ __pycache__/
 data/processed/*
 !data/processed/.gitkeep
 qdrant_data/
-results/*
-!results/.gitkeep
+
 
 # Keš modela
 .cache/
