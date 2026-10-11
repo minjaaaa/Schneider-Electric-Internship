@@ -158,6 +158,10 @@ if __name__ == "__main__":
             if mode == "expand":                               # eksperiment 5
                 return candidates[:k]
             return rerank(question, candidates, k)             # eksperiment 6
+        """
+            mode = None            →  search(k)                                  (eksp. 1–4)
+            mode = "expand"        →  search(k)  → expand → prvih k               (eksp. 5)
+            mode = "expand+rerank" →  search(20) → expand → rerank → prvih k      (eksp. 6) """
         return search_fn
 
     results = []
