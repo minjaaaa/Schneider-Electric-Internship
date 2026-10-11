@@ -10,6 +10,8 @@ from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
 
+from indexing import build_hybrid_index, build_index, get_client, search, hybrid_search
+
 
 KS = (1, 3, 5, 10)
 
@@ -118,21 +120,25 @@ if __name__ == "__main__":
     fixed = load_jsonl(DATA_PROCESSED / "chunks_fixed.jsonl")
     section = load_jsonl(DATA_PROCESSED / "chunks_section.jsonl")
 
-    experiments = [   # (ime, chunk-ovi, putanja naslova, izbaci arhivu, dorada rezultata)
-        ("1_fixed", fixed, False, False, None),
-        ("2_section", section, False, False, None),
-        ("3_section_path", section, True, False, None),
-        ("3b_section_path_filter", section, True, True, None),
+    experiments = [   # (ime, chunk-ovi, putanja naslova, izbaci arhivu, retriever, dorada rezultata)
+        ("1_fixed", fixed, False, False, "dense", None),
+        ("2_section", section, False, False, "dense", None),
+        ("3_section_path", section, True, False, "dense", None),
+        ("3b_section_path_filter", section, True, True, "dense", None),
     ]
     if descriptions_path().exists():
         with_figures = section + figure_chunks()
         experiments += [
-            ("4_figures", with_figures, True, True, None),
-            ("5_expansion", with_figures, True, True, "expand"),
-            ("6_rerank", with_figures, True, True, "expand+rerank"),
+            ("4_figures", with_figures, True, True, "dense", None),
+            ("5_expansion", with_figures, True, True, "dense", "expand"),
+            ("6_rerank", with_figures, True, True, "dense", "expand+rerank"),
+            ("4b_dense_m3", with_figures, True, True, "m3-dense", None),   # kontrola: treba da = eksp. 4, isti pristup, samo druga biblioteka
+            ("7_sparse", with_figures, True, True, "m3-sparse", None),
+            ("8_hybrid", with_figures, True, True, "m3-hybrid", None),
+            ("9_hybrid_rerank", with_figures, True, True, "m3-hybrid", "expand+rerank"),
         ]
     else:
-        print("Nema opisa slika (pokrenite python src/figures.py) - eksperimenti 4-6 se preskaču.")
+        print("Nema opisa slika (pokrenite python src/figures.py) - eksperimenti 4-9 se preskaču.")
 
     parser = argparse.ArgumentParser(description="Pokreće eksperimente retrievera i čuva rezultate.")
     parser.add_argument("--only", nargs="+", metavar="IME",
@@ -147,13 +153,18 @@ if __name__ == "__main__":
 
     client = get_client()
 
-    def make_search_fn(collection: str, exclude: bool, mode: str | None, links: dict):
+    def make_search_fn(collection: str, retriever: str, exclude: bool, mode: str | None, links: dict):
         """Pravi funkciju pretrage (pitanje, k) -> rezultati za jedan eksperiment."""
+        def retrieve(question: str, n: int) -> list[dict]:
+            if retriever == "dense":
+                return search(client, collection, question, n, exclude_superseded=exclude)
+            return hybrid_search(client, collection, question, n, using=retriever.split("-")[1], exclude_superseded=exclude)
+
         def search_fn(question: str, k: int) -> list[dict]:
-            if mode is None:                                   # eksperimenti 1-4: samo dense pretraga
-                return search(client, collection, question, k, exclude_superseded=exclude)
+            if mode is None:                                   
+                return retrieve(question, k)                            # eksp. 1-4
             n = RERANK_CANDIDATES if mode == "expand+rerank" else k
-            candidates = search(client, collection, question, n, exclude_superseded=exclude)
+            candidates = retrieve(question, n)  # eksp. 5-6, 8-9
             candidates = expand(candidates, links, k=len(candidates) * 2)   # dodaj memoe i slike
             if mode == "expand":                               # eksperiment 5
                 return candidates[:k]
@@ -165,11 +176,20 @@ if __name__ == "__main__":
         return search_fn
 
     results = []
-    for name, chunks, with_path, exclude, mode in experiments:
-        print(f"Indeksiram {name} ({len(chunks)} chunk-ova)...")
-        build_index(client, name, chunks, with_path=with_path)
+    built = set()   # eksperimenti 4b, 7-9 dele jednu kolekciju, pravi se samo jednom
+    for name, chunks, with_path, exclude, retriever, mode in experiments:
+        if retriever == "dense":
+            collection = name
+            print(f"Indeksiram {name} ({len(chunks)} chunk-ova)...")
+            build_index(client, collection, chunks, with_path=with_path)
+        else:
+            collection = f"m3_hybrid_{'path' if with_path else 'nopath'}_{len(chunks)}"
+            if collection not in built:
+                print(f"Indeksiram {collection} - dense + sparse ({len(chunks)} chunk-ova)...")
+                build_hybrid_index(client, collection, chunks, with_path=with_path)
+                built.add(collection)
         print(f"Pokrećem {name}...")
-        search_fn = make_search_fn(name, exclude, mode, build_links(chunks))
+        search_fn = make_search_fn(collection, retriever, exclude, mode, build_links(chunks))
         results.append(run_experiment(name, questions, search_fn))
     client.close()
 

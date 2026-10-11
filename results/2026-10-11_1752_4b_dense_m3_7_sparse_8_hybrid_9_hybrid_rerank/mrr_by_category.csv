@@ -1,0 +1,10 @@
+category,4b_dense_m3,7_sparse,8_hybrid,9_hybrid_rerank
+table,1.0,1.0,1.0,1.0
+override,1.0,1.0,1.0,1.0
+image,0.583,0.567,0.708,0.938
+confusable,0.778,0.722,0.75,0.889
+image+override,1.0,1.0,1.0,1.0
+text,1.0,0.812,0.875,1.0
+superseded-trap,1.0,0.75,1.0,1.0
+templated,1.0,1.0,1.0,1.0
+multi-hop,1.0,0.5,1.0,1.0

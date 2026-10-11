@@ -19,6 +19,7 @@ EVAL_QUESTIONS = EVAL_DIR / "eval_questions.json"
 EMBEDDING_MODEL = "BAAI/bge-m3"
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 RERANK_CANDIDATES = 20            # koliko kandidata iz Qdrant-a reranker preuredjuje (eksperiment 6)
+HYBRID_PREFETCH = 20              # koliko kandidata daje svaka lista (dense, sparse) pre RRF spajanja (eksp. 8-9)
 
 VLM_MODEL = "gemini-3.5-flash"    # opisi slika preko Gemini API-ja (eksperiment 4)
 

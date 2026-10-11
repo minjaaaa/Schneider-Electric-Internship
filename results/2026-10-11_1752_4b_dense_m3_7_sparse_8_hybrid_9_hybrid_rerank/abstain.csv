@@ -1,0 +1,7 @@
+,mean,mean,max,max
+vrsta,sa odgovorom,bez odgovora,sa odgovorom,bez odgovora
+experiment,,,,
+4b_dense_m3,0.662,0.592,0.761,0.681
+7_sparse,0.218,0.177,0.345,0.211
+8_hybrid,0.926,0.854,1.0,1.0
+9_hybrid_rerank,0.859,0.094,0.999,0.191
