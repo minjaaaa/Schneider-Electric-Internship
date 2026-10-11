@@ -8,6 +8,9 @@ from qdrant_client import QdrantClient, models
 from chunking import text_for_embedding
 from config import EMBEDDING_MODEL, QDRANT_PATH, HYBRID_PREFETCH
 
+import hashlib
+import json
+
 
 
 @lru_cache(maxsize=1) # Učitava model samo jednom, svaki sledeci get_model() vraća isti objekat
@@ -104,6 +107,32 @@ def build_hybrid_index(client: QdrantClient, collection: str, chunks: list[dict]
         points=[models.PointStruct(id=i, vector={"dense": d, "sparse": s}, payload=c)
                 for i, (d, s, c) in enumerate(zip(dense, sparse, chunks))],
     )
+
+# ---------- Čuvanje indeksa između pokretanja ----------
+
+def index_fingerprint(chunks: list[dict], with_path: bool, kind: str) -> str:
+    """Kratak heš svega od čega indeks zavisi: model, vrsta indeksa, putanja naslova, chunk-ovi."""
+    h = hashlib.sha256()
+    h.update(f"{EMBEDDING_MODEL}|{kind}|{with_path}".encode("utf-8"))
+    for c in chunks:
+        h.update(json.dumps(c, sort_keys=True, ensure_ascii=False).encode("utf-8")) # dumps pretvara ceo chunk u tekst sortiram da bi hes bio isti za iste podatke
+    return h.hexdigest()[:10] # proveravam poklapanje prvih 10 znakova hesa, ne svih 64, dovoljno je za detekciju promena
+
+
+def ensure_index(client: QdrantClient, chunks: list[dict], with_path: bool = True,
+                 hybrid: bool = False) -> str:
+    """Vraća ime kolekcije za ove chunk-ove; indeksira samo ako takva kolekcija još ne postoji."""
+    kind = "m3" if hybrid else "dense"
+    collection = f"{kind}_{index_fingerprint(chunks, with_path, kind)}"
+
+    if client.collection_exists(collection) and client.count(collection).count == len(chunks):
+        print(f"Koristim sačuvan indeks {collection} ({len(chunks)} chunk-ova)")
+        return collection
+
+    print(f"Indeksiram {collection} ({len(chunks)} chunk-ova)...")
+    build = build_hybrid_index if hybrid else build_index
+    build(client, collection, chunks, with_path=with_path)
+    return collection
 
 def hybrid_search(client: QdrantClient, collection: str, query: str, k: int = 10,
                   using: str = "hybrid", exclude_superseded: bool = False,

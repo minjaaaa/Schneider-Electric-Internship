@@ -10,7 +10,6 @@ from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
 
-from indexing import build_hybrid_index, build_index, get_client, search, hybrid_search
 
 
 KS = (1, 3, 5, 10)
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     from chunking import load_jsonl
     from config import DATA_PROCESSED, EVAL_QUESTIONS, RERANK_CANDIDATES
     from figures import descriptions_path, figure_chunks
-    from indexing import build_index, get_client, search
+    from indexing import ensure_index, get_client, hybrid_search, search
     from retrieval import build_links, expand, rerank
 
     questions = json.loads(EVAL_QUESTIONS.read_text(encoding="utf-8"))
@@ -176,18 +175,9 @@ if __name__ == "__main__":
         return search_fn
 
     results = []
-    built = set()   # eksperimenti 4b, 7-9 dele jednu kolekciju, pravi se samo jednom
     for name, chunks, with_path, exclude, retriever, mode in experiments:
-        if retriever == "dense":
-            collection = name
-            print(f"Indeksiram {name} ({len(chunks)} chunk-ova)...")
-            build_index(client, collection, chunks, with_path=with_path)
-        else:
-            collection = f"m3_hybrid_{'path' if with_path else 'nopath'}_{len(chunks)}"
-            if collection not in built:
-                print(f"Indeksiram {collection} - dense + sparse ({len(chunks)} chunk-ova)...")
-                build_hybrid_index(client, collection, chunks, with_path=with_path)
-                built.add(collection)
+        # indeksira samo ako kolekcija sa istim otiskom (chunk-ovi + podešavanja) još ne postoji
+        collection = ensure_index(client, chunks, with_path=with_path, hybrid=(retriever != "dense"))
         print(f"Pokrećem {name}...")
         search_fn = make_search_fn(collection, retriever, exclude, mode, build_links(chunks))
         results.append(run_experiment(name, questions, search_fn))
