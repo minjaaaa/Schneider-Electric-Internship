@@ -1,0 +1,7 @@
+,mean,mean,max,max
+vrsta,sa odgovorom,bez odgovora,sa odgovorom,bez odgovora
+experiment,,,,
+4_figures,0.657,0.592,0.766,0.681
+5_expansion,0.657,0.592,0.766,0.681
+6_rerank,0.787,0.094,0.999,0.191
+8_hybrid,0.915,0.854,1.0,1.0

@@ -319,5 +319,140 @@
       "Figure 3"
     ],
     "category": "image"
+  },
+  {
+    "id": "Q37",
+    "question": "Can a T2 technician use Work from Anywhere?",
+    "expected_answer": "No. T grades are NSFS technical (field) roles, and NSFS field roles are not eligible for Work from Anywhere.",
+    "sources": [
+      "9.2",
+      "3.4"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q38",
+    "question": "Can I use a public AI chatbot to summarise a customer contract?",
+    "expected_answer": "No. Customer contracts are CONFIDENTIAL and public AI tools may be used only with PUBLIC data; use NorthStar Assistant instead.",
+    "sources": [
+      "12.1",
+      "7.5"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q39",
+    "question": "An NSFS technician works on a Sunday. What rate are they paid and when is it paid out?",
+    "expected_answer": "200% of the hourly rate, paid on the 15th of the following month together with the salary.",
+    "sources": [
+      "3.3",
+      "10.1"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q40",
+    "question": "I relocated with NSS support and took a certification costing 1,500 EUR. What must I repay if I resign after 6 months?",
+    "expected_answer": "50% of the relocation package, plus a pro-rata share of the certification cost (certifications above 1,000 EUR).",
+    "sources": [
+      "3.5",
+      "10.2"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q41",
+    "question": "A Premium customer's Polaris Edge appliance in Germany is down (P1). How fast will an engineer be on site, and which entity sends them?",
+    "expected_answer": "Within 24 hours (EU); the engineer comes from NSFS, which maintains Polaris Edge.",
+    "sources": [
+      "13.1",
+      "Figure 9"
+    ],
+    "category": "multi-hop"
+  },
+  {
+    "id": "Q42",
+    "question": "I lost my laptop. How quickly must I report it and what number do I call?",
+    "expected_answer": "Immediately, at the latest within 1 hour, via the 24/7 Security Hotline, ext. 7777.",
+    "sources": [
+      "7.3",
+      "Figure 4"
+    ],
+    "category": "text+image"
+  },
+  {
+    "id": "Q43",
+    "question": "My laptop broke in the Toronto office. Can I get a replacement the same day?",
+    "expected_answer": "No. Toronto has no IT Bar; devices are replaced by courier (3 business days).",
+    "sources": [
+      "8.6",
+      "Figure 4"
+    ],
+    "category": "text+image"
+  },
+  {
+    "id": "Q44",
+    "question": "Can I e-mail a RESTRICTED document to a customer, or print it to take to the meeting?",
+    "expected_answer": "Neither. RESTRICTED information may never be shared externally, and printing is prohibited.",
+    "sources": [
+      "12.1",
+      "Figure 8"
+    ],
+    "category": "text+image"
+  },
+  {
+    "id": "Q45",
+    "question": "A Prague-based employee travels to Lisbon for two nights in April 2026. What are the hotel cap and the per diem?",
+    "expected_answer": "Hotel cap 160 EUR per night (memo PT-2026-02, stays from 1 April 2026); international per diem 55 EUR per day (minus 10 EUR if breakfast is included).",
+    "sources": [
+      "5.2",
+      "16.2",
+      "5.3"
+    ],
+    "category": "rule+memo"
+  },
+  {
+    "id": "Q46",
+    "question": "Which rules have changed since version 3.2 of the knowledge base was published?",
+    "expected_answer": "Two memos: PT-2026-02 raises the Lisbon hotel cap from 140 to 160 EUR (stays from 1 April 2026); PT-2026-04 raises NSS remote work from 2 to 3 days per week (from 1 March 2026).",
+    "sources": [
+      "16.2",
+      "Figure 7"
+    ],
+    "category": "rule+memo"
+  },
+  {
+    "id": "Q47",
+    "question": "Compare parking at the Prague and Lisbon offices.",
+    "expected_answer": "Prague: 38 underground spaces booked in SpaceFinder, 6 EV chargers. Lisbon: no company parking, 30% discount at the public garage next door.",
+    "sources": [
+      "8.2",
+      "8.3"
+    ],
+    "category": "compare"
+  },
+  {
+    "id": "Q48",
+    "question": "I lost my badge in Singapore. By when must I report it and how much will it cost?",
+    "expected_answer": "Report it to reception within 24 hours; the replacement fee is 18 EUR (charged in SGD).",
+    "sources": [
+      "7.3",
+      "8.7"
+    ],
+    "category": "compare"
+  },
+  {
+    "id": "Q49",
+    "question": "Which office has the most public holidays per year?",
+    "expected_answer": "Lisbon, with 14 (13 national + 1 municipal).",
+    "sources": [
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5",
+      "8.6",
+      "8.7"
+    ],
+    "category": "compare"
   }
 ]

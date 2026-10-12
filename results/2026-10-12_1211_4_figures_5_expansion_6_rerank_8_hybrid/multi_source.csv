@@ -1,0 +1,5 @@
+experiment,recall@3,recall@5,recall@10,all_sources@3,all_sources@5,all_sources@10,cover_rank,cover_rank_max,missing@10,n_questions
+4_figures,0.706,0.863,0.99,0.412,0.706,0.941,4.188,7.0,1,17
+5_expansion,0.765,0.833,0.99,0.529,0.647,0.941,4.312,8.0,1,17
+6_rerank,0.873,0.961,1.0,0.706,0.882,1.0,3.0,7.0,0,17
+8_hybrid,0.853,0.951,1.0,0.706,0.882,1.0,3.235,7.0,0,17

@@ -1,4 +1,4 @@
-"""Evaluacija retrievera: Hit@k, Recall@k, MRR, nDCG@k i metrike specifične za dokument"""
+"""Evaluacija retrievera: Hit@k, Recall@k, MRR, nDCG@k, metrike za više izvora i metrike specifične za dokument"""
 from __future__ import annotations
 
 import math
@@ -36,9 +36,14 @@ def evaluate_question(retrieved: list[dict], sources: list[str], ks=KS) -> dict:
         n_found = sum(1 for r in found_at.values() if r <= k)
         row[f"hit@{k}"] = float(n_found > 0) # koliko pitanja je imalo bar jedan pogodan chunk u top-k
         row[f"recall@{k}"] = n_found / len(sources) # od svih tacnih izvora, koliko ih je bilo u prvih k rezultata
+        row[f"all_sources@{k}"] = float(n_found == len(sources)) # 1 ako su SVI izvori u prvih k, inače 0
 
     first = min(found_at.values(), default=None) # vraca None ako je found_at prazan
     row["mrr"] = 1 / first if first is not None else 0
+
+    # cover_rank: pozicija na kojoj je pronađen POSLEDNJI potreban izvor = najmanji k koji bi pokrio sve izvore i za koji bi all_sources@k = 1
+    # Ako neki izvor nije pronađen u celoj listi (top 10), vrednost je NaN.
+    row["cover_rank"] = max(found_at.values()) if len(found_at) == len(sources) else float("nan")
 
     k = max(ks)
     dcg = sum(1 / math.log2(r + 1) for r in found_at.values() if r <= k)
@@ -62,6 +67,7 @@ def run_experiment(name: str, questions: list[dict], search_fn, k: int = max(KS)
             "experiment": name,
             "id": q["id"],
             "category": q["category"],
+            "n_sources": len(q["sources"]),          # 0 = bez odgovora, 1 = jedan izvor, 2+ = više izvora
             "top_score": retrieved[0]["score"] if retrieved else 0.0,
             "superseded@5": float(any(s.split(".")[0] == "17" for c in top5 for s in c["sections"])),
             # da li je bar jedan od prvig 5 rezultata iz arhive
@@ -78,12 +84,32 @@ def run_experiment(name: str, questions: list[dict], search_fn, k: int = max(KS)
 
 def summarize(df: pd.DataFrame, by: str | None = None) -> pd.DataFrame:
     """Prosek metrika po eksperimentu (i opciono po kategoriji), samo za pitanja sa odgovorom."""
-    metrics = [c for c in df.columns if c.startswith(("hit@", "recall@", "mrr", "ndcg@"))]
+    metrics = [c for c in df.columns if c.startswith(("hit@", "recall@", "all_sources@", "mrr", "ndcg@", "cover_rank"))]
     metrics += ["superseded@5", "words@5"]
     metrics += [c for c in ["latency_s"] if c in df.columns]
     answerable = df[df["category"] != "abstain"]
     group = ["experiment"] + ([by] if by else [])
     return answerable.groupby(group, sort=False)[metrics].mean().round(3)
+
+
+def multi_source_report(df: pd.DataFrame) -> pd.DataFrame:
+    """Metrike samo za pitanja sa 2+ izvora: koliko izvora je pronađeno i koliko duboko treba ići.
+
+    recall@k        prosečan udeo pronađenih izvora (delimična pokrivenost se računa)
+    all_sources@k   udeo pitanja kod kojih su SVI izvori u top k (strože: odgovor bez jednog izvora je nepotpun)
+    cover_rank      prosečna pozicija poslednjeg potrebnog izvora, samo za pitanja kod kojih su svi pronađeni
+    cover_rank_max  najgori slučaj, tj. koliki k bi bio potreban da se pokriju sva pitanja
+    missing@10      broj pitanja kod kojih bar jedan izvor nije ni u top 10
+    """
+    multi = df[df["n_sources"] > 1]
+    g = multi.groupby("experiment", sort=False)
+    cols = [f"{m}@{k}" for m in ("recall", "all_sources") for k in (3, 5, 10)]
+    report = g[cols].mean()
+    report["cover_rank"] = g["cover_rank"].mean()
+    report["cover_rank_max"] = g["cover_rank"].max()
+    report["missing@10"] = g["all_sources@10"].apply(lambda x: int((x == 0).sum()))
+    report["n_questions"] = g.size()
+    return report.round(3)
 
 
 def abstain_report(df: pd.DataFrame) -> pd.DataFrame:
@@ -94,7 +120,7 @@ def abstain_report(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def save_results(df: pd.DataFrame, name: str) -> Path:
-    """Čuva rezultate jednog pokretanja u results/<datum_vreme>_<ime>/ (4 CSV fajla)."""
+    """Čuva rezultate jednog pokretanja u results/<datum_vreme>_<ime>/ (5 CSV fajlova)."""
     from config import RESULTS_DIR
 
     out = RESULTS_DIR / f"{datetime.now():%Y-%m-%d_%H%M}_{name}"
@@ -103,6 +129,7 @@ def save_results(df: pd.DataFrame, name: str) -> Path:
     summarize(df).to_csv(out / "summary.csv")
     summarize(df, by="category")["mrr"].unstack(0).to_csv(out / "mrr_by_category.csv")
     abstain_report(df).to_csv(out / "abstain.csv")
+    multi_source_report(df).to_csv(out / "multi_source.csv")
     return out
 
 if __name__ == "__main__":
@@ -192,6 +219,8 @@ if __name__ == "__main__":
     print(summarize(df))
     print("\n=== MRR po kategoriji ===")
     print(summarize(df, by="category")["mrr"].unstack(0))
+    print("\n=== Pitanja sa više izvora ===")
+    print(multi_source_report(df))
     print("\n=== Skor najboljeg rezultata ===")
     print(abstain_report(df))
     print(f"\nRezultati sačuvani u: {out}")
