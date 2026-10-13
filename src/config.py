@@ -22,6 +22,9 @@ RERANK_CANDIDATES = 20            # koliko kandidata iz Qdrant-a reranker preure
 HYBRID_PREFETCH = 20              # koliko kandidata daje svaka lista (dense, sparse) pre RRF spajanja (eksp. 8-9)
 
 VLM_MODEL = "gemini-3.5-flash"    # opisi slika preko Gemini API-ja (eksperiment 4)
+LLM_MODEL = "gemini-3.8-flash"     # tekstualni LLM za razlaganje pitanja (eksp. 10-11); besplatno: 20 zahteva/dan
+LLM_PAUSE_S = 5                   # pauza između poziva LLM-a (besplatni nivo ima limit zahteva u minutu)
+LLM_BATCH_SIZE = 10               # pitanja po jednom pozivu LLM-a (49 pitanja = 5 poziva)
 
 for d in (DATA_PROCESSED, RESULTS_DIR):
     d.mkdir(parents=True, exist_ok=True)

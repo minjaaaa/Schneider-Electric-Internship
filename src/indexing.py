@@ -162,3 +162,35 @@ def hybrid_search(client: QdrantClient, collection: str, query: str, k: int = 10
     else:
         raise ValueError(f"nepoznat nacin pretrage: {using!r}")
     return [{**p.payload, "score": p.score} for p in result.points]
+
+# ---------- Eksperimenti 10-11: više upita (pitanje + podpitanja) spojenih RRF-om ----------
+
+def multi_query_search(client: QdrantClient, collection: str, queries: list[str], k: int = 10,
+                       hybrid: bool = False, exclude_superseded: bool = False,
+                       prefetch: int = HYBRID_PREFETCH, model=None) -> list[dict]:
+    """Pretraga sa više upita odjednom: svaki upit daje svoju listu kandidata, liste se spajaju RRF-om.
+
+    queries[0] je originalno pitanje, ostali su podpitanja iz decompose.py.
+    hybrid=False -> dense kolekcija (eksp. 10), hybrid=True -> dense + sparse kolekcija (eksp. 11).
+    Ako je upit samo jedan (pitanje nije razloženo), poziva se obična pretraga,
+    pa su rezultati za jednostavna pitanja identični eksperimentima 4 i 8.
+    """
+    if len(queries) == 1: # za 40 nerazlozenih pitanja
+        if hybrid:
+            return hybrid_search(client, collection, queries[0], k, using="hybrid",
+                                 exclude_superseded=exclude_superseded, prefetch=prefetch, model=model)
+        return search(client, collection, queries[0], k, exclude_superseded=exclude_superseded, model=model)
+
+    query_filter = superseded_filter(exclude_superseded)
+    n = max(k, prefetch)            # svaka lista daje n kandidata, RRF od svih bira k
+    if hybrid:
+        dense, sparse = embed_m3(queries, model)        # svi upiti u jednom prolazu kroz model
+        prefetches = [models.Prefetch(query=d, using="dense", limit=n, filter=query_filter) for d in dense]
+        prefetches += [models.Prefetch(query=s, using="sparse", limit=n, filter=query_filter) for s in sparse]
+    else:
+        prefetches = [models.Prefetch(query=v, limit=n, filter=query_filter) for v in embed(queries, model)]
+
+    result = client.query_points(collection, prefetch=prefetches,
+                                 query=models.FusionQuery(fusion=models.Fusion.RRF),
+                                 limit=k, query_filter=query_filter, with_payload=True)
+    return [{**p.payload, "score": p.score} for p in result.points]

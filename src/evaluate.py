@@ -139,7 +139,7 @@ if __name__ == "__main__":
     from chunking import load_jsonl
     from config import DATA_PROCESSED, EVAL_QUESTIONS, RERANK_CANDIDATES
     from figures import descriptions_path, figure_chunks
-    from indexing import ensure_index, get_client, hybrid_search, search
+    from indexing import ensure_index, get_client, hybrid_search, multi_query_search, search
     from retrieval import build_links, expand, rerank
 
     questions = json.loads(EVAL_QUESTIONS.read_text(encoding="utf-8"))
@@ -162,9 +162,12 @@ if __name__ == "__main__":
             ("7_sparse", with_figures, True, True, "m3-sparse", None),
             ("8_hybrid", with_figures, True, True, "m3-hybrid", None),
             ("9_hybrid_rerank", with_figures, True, True, "m3-hybrid", "expand+rerank"),
+            # razlaganje pitanja (decompose.py): pitanje + podpitanja, liste spojene RRF-om
+            ("10_decomp", with_figures, True, True, "dense-decomp", None),            # porediti sa 4_figures
+            ("11_decomp_hybrid", with_figures, True, True, "m3-hybrid-decomp", None), # porediti sa 8_hybrid
         ]
     else:
-        print("Nema opisa slika (pokrenite python src/figures.py) - eksperimenti 4-9 se preskaču.")
+        print("Nema opisa slika (pokrenite python src/figures.py) - eksperimenti 4-11 se preskaču.")
 
     parser = argparse.ArgumentParser(description="Pokreće eksperimente retrievera i čuva rezultate.")
     parser.add_argument("--only", nargs="+", metavar="IME",
@@ -177,11 +180,22 @@ if __name__ == "__main__":
             parser.error(f"nepoznati eksperimenti: {sorted(unknown)}; dostupni: {available}")
         experiments = [e for e in experiments if e[0] in args.only]
 
+    # podpitanja se čitaju samo iz keša (bez API poziva), i to samo ako se pokreće eksperiment 10 ili 11
+    subqueries = {}
+    if any(r.endswith("-decomp") for *_, r, _ in experiments):
+        from decompose import load_subqueries
+        subqueries = load_subqueries()
+
     client = get_client()
 
     def make_search_fn(collection: str, retriever: str, exclude: bool, mode: str | None, links: dict):
         """Pravi funkciju pretrage (pitanje, k) -> rezultati za jedan eksperiment."""
         def retrieve(question: str, n: int) -> list[dict]:
+            if retriever.endswith("-decomp"):                  # eksp. 10-11
+                # originalno pitanje uvek prvo tj. podpitanja se dodaju samo ako je pitanje razloženo
+                subs = [q for q in subqueries.get(question, []) if q != question]
+                return multi_query_search(client, collection, [question] + subs, n,
+                                          hybrid=retriever.startswith("m3"), exclude_superseded=exclude)
             if retriever == "dense":
                 return search(client, collection, question, n, exclude_superseded=exclude)
             return hybrid_search(client, collection, question, n, using=retriever.split("-")[1], exclude_superseded=exclude)
@@ -198,13 +212,16 @@ if __name__ == "__main__":
         """
             mode = None            →  search(k)                                  (eksp. 1–4)
             mode = "expand"        →  search(k)  → expand → prvih k               (eksp. 5)
-            mode = "expand+rerank" →  search(20) → expand → rerank → prvih k      (eksp. 6) """
+            mode = "expand+rerank" →  search(20) → expand → rerank → prvih k      (eksp. 6)
+            retriever: "dense" (1–6), "m3-dense" / "m3-sparse" / "m3-hybrid" (4b, 7–9),
+                       "dense-decomp" / "m3-hybrid-decomp" (10–11: pitanje + podpitanja, RRF) """
         return search_fn
 
     results = []
     for name, chunks, with_path, exclude, retriever, mode in experiments:
         # indeksira samo ako kolekcija sa istim otiskom (chunk-ovi + podešavanja) još ne postoji
-        collection = ensure_index(client, chunks, with_path=with_path, hybrid=(retriever != "dense"))
+        # "m3-..." retriveri koriste kolekciju sa dense + sparse vektorima, ostali običnu dense kolekciju
+        collection = ensure_index(client, chunks, with_path=with_path, hybrid=retriever.startswith("m3"))
         print(f"Pokrećem {name}...")
         search_fn = make_search_fn(collection, retriever, exclude, mode, build_links(chunks))
         results.append(run_experiment(name, questions, search_fn))

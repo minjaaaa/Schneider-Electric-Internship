@@ -1,0 +1,13 @@
+category,4_figures,8_hybrid,10_decomp,11_decomp_hybrid
+table,1.0,1.0,1.0,1.0
+override,1.0,1.0,1.0,1.0
+image,0.583,0.708,0.583,0.708
+confusable,0.778,0.75,0.778,0.75
+image+override,1.0,1.0,1.0,1.0
+text,1.0,0.875,1.0,0.875
+superseded-trap,1.0,1.0,1.0,1.0
+templated,1.0,1.0,1.0,1.0
+multi-hop,0.75,0.722,0.75,0.75
+text+image,0.667,0.667,0.667,0.667
+rule+memo,0.667,0.667,0.667,0.667
+compare,0.667,0.833,0.667,0.833
