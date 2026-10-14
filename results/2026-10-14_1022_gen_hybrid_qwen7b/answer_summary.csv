@@ -1,0 +1,11 @@
+,value
+n_questions,49.0
+parse_error_rate,0.0
+abstain_recall,0.75
+false_abstain_rate,0.0
+number_recall,0.679
+answers_with_unsupported_numbers,0.02
+citation_precision,0.756
+citation_recall,0.793
+context_has_all_sources,0.956
+latency_median_s,3.78
