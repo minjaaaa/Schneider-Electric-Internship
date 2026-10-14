@@ -85,12 +85,12 @@ class HFChatModel:
     def __call__(self, messages: list[dict]) -> str:
         import torch
         inputs = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True,
-                                                    return_tensors="pt").to(self.model.device)
-        with torch.no_grad():                                                       # isto sto i tempearture=0, do_sample=False
-            output = self.model.generate(inputs, max_new_tokens=self.max_new_tokens, do_sample=False,
+                                                    return_tensors="pt", return_dict=True).to(self.model.device)
+        with torch.no_grad():           # raspakuje recnik u argumente za model.generate()
+            output = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False,
                                          pad_token_id=self.tokenizer.eos_token_id)
-        return self.tokenizer.decode(output[0][inputs.shape[1]:], skip_special_tokens=True)
-        # generate vraca prompt + odgovor, mi secemo i ostavljamo samo odgovor
+        n_prompt = inputs["input_ids"].shape[1]                  # dužina prompta u tokenima
+        return self.tokenizer.decode(output[0][n_prompt:], skip_special_tokens=True)
 
 def answer_question(question: str, chunks: list[dict], llm) -> dict: # cuva i ono sto model vidi, a nije odgovorio
     """Generiše odgovor za jedno pitanje na osnovu datih chunkova."""
