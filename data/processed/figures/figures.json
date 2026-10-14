@@ -1,0 +1,74 @@
+[
+  {
+    "figure_id": "Figure 1",
+    "caption": "Organisation overview",
+    "section": "1.2",
+    "section_title": "1.2 Legal entities",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_1.png",
+    "source_file": "media/image1.png"
+  },
+  {
+    "figure_id": "Figure 2",
+    "caption": "New joiner journey",
+    "section": "2.5",
+    "section_title": "2.5 Equipment",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_2.png",
+    "source_file": "media/image2.png"
+  },
+  {
+    "figure_id": "Figure 3",
+    "caption": "Expense claim approval",
+    "section": "5.6",
+    "section_title": "5.6 Submitting expense claims",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_3.png",
+    "source_file": "media/image3.png"
+  },
+  {
+    "figure_id": "Figure 4",
+    "caption": "IT Service Portal home page",
+    "section": "7.2",
+    "section_title": "7.2 Devices",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_4.png",
+    "source_file": "media/image4.png"
+  },
+  {
+    "figure_id": "Figure 5",
+    "caption": "Reception poster",
+    "section": "7.4",
+    "section_title": "7.4 Networks and remote access",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_5.png",
+    "source_file": "media/image5.png"
+  },
+  {
+    "figure_id": "Figure 6",
+    "caption": "Office floor plan",
+    "section": "8.1",
+    "section_title": "8.1 Group-wide office rules",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_6.png",
+    "source_file": "media/image6.png"
+  },
+  {
+    "figure_id": "Figure 8",
+    "caption": "Classification labels",
+    "section": "12.1",
+    "section_title": "12.1 Classification levels",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_8.png",
+    "source_file": "media/image7.png"
+  },
+  {
+    "figure_id": "Figure 9",
+    "caption": "Support targets",
+    "section": "13.2",
+    "section_title": "13.2 Standard support",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_9.png",
+    "source_file": "media/image8.png"
+  },
+  {
+    "figure_id": "Figure 7",
+    "caption": "Scanned memo PT-2026-04",
+    "section": "16.2",
+    "section_title": "16.2 Memos issued after version 3.2",
+    "image_path": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\data\\processed\\figures\\figure_7.png",
+    "source_file": "media/image9.png"
+  }
+]
