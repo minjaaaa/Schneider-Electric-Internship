@@ -1,107 +1,188 @@
-# NorthStar RAG – retriever nad internom bazom znanja
+# NorthStar RAG
 
-Projekat sa prakse: retriever (a kasnije i agent) koji pronalazi odgovore u dokumentu
-*NorthStar Knowledge Base v3.2*. Dokument sadrži tekst, tabele i slike (uključujući skenirani memo).
-Svi podaci u njemu su fiktivni.
+RAG sistem (pretraga + generisanje odgovora) nad internom bazom znanja fiktivne kompanije NorthStar
+(`NorthStar_Knowledge_Base.docx`, 48 strana: tekst, tabele, 9 slika, uključujući skenirani memo).
+Projekat nastaje tokom prakse u Schneider Electric-u.
+
+Dokument je namerno težak za pretragu:
+
+- dve firme (NSS i NSFS) sa različitim pravilima za istu temu;
+- šest kancelarija sa skoro identičnim tabelama;
+- arhiva zastarelih pravila (poglavlje 17);
+- memoi koji menjaju postojeća pravila (PT-2026-02, PT-2026-04), jedan samo kao skenirana slika.
 
 ## Pipeline
 
 ```
-.docx ─► parsiranje (Docling + izdvajanje slika) ─► Markdown + slike
-      ─► opisi slika (Gemini) ─► chunking sa metapodacima
-      ─► indeksiranje (BGE-M3 → Qdrant) ─► pretraga (+ filter arhive, proširenje, reranker)
-      ─► evaluacija (Hit@k, Recall@k, MRR, nDCG@k ...) ─► results/
+.docx ──► parse.py ──► Markdown + slike
+                │
+                ├──► figures.py ──► opisi slika (Gemini, keširano)
+                │
+                └──► chunking.py ──► delovi dokumenta (po sekcijama) + metapodaci
+                                         │  (status: valid / memo / superseded, overridden_by, office...)
+                                         ▼
+                        indexing.py ──► Qdrant: dense + sparse vektori (BGE-M3)
+                                         │
+                   pitanje ──► pretraga (hibrid, RRF) ──► top 5 delova
+                                         │
+                                         ▼
+                        generate.py ──► LLM (Qwen2.5, Colab) ──► odgovor + citati + odbijanje
+                                         │
+                                         ▼
+               evaluate.py (pretraga)  ·  evaluate_text.py (odgovori)
 ```
-
-Stack: **Docling** (parsiranje) · **Qdrant** u lokalnom režimu (vektorska baza) · **BGE-M3** (embedding) ·
-**bge-reranker-v2-m3** (reranker) · **Gemini 3.5 Flash** (opisi slika, besplatni nivo API-ja).
 
 ## Trenutni rezultati
 
-Najbolja konfiguracija (eksperiment `6_rerank`) na 32 pitanja sa odgovorom:
-**Hit@1 = 0,91 · Hit@3 = 1,00 · MRR = 0,95 · nDCG@10 = 0,96**, bez zastarelih pravila u rezultatima.
-Glavni trošak: ~11 s po pitanju na procesoru (reranker). Detalji po eksperimentima su u `results/`.
+**Pretraga** – evaluacioni skup od 49 pitanja (45 sa odgovorom, 4 bez odgovora; 17 traži 2–6 izvora).
+
+| Pretraga                     | Hit@1 (32 osnovna pitanja) | Svi izvori u top 5 (17 višeizvornih) | Vreme po pitanju |
+| ---------------------------- | -------------------------- | ------------------------------------- | ---------------- |
+| Dense                        | 0,69                       | 71%                                   | 0,4 s            |
+| Hibrid (dense + sparse, RRF) | 0,72                       | 88%                                   | 0,2 s            |
+| Dense + reranker             | 0,91                       | 88%                                   | ~14 s (CPU)      |
+
+- Na jednostavnim pitanjima hibrid ne donosi merljivo poboljšanje; na pitanjima sa više izvora dostiže reranker, a mnogo je brži.
+- Razlaganje pitanja preko LLM-a (query decomposition, eksp. 10–11) uz hibrid ne pomaže.
+
+**Generisanje** – hibridna pretraga, top 5, ručna ocena svih 49 odgovora:
+
+| Model                        | Tačno / delimično / netačno | Vreme po odgovoru (T4 GPU) |
+| ---------------------------- | ------------------------------ | -------------------------- |
+| Qwen2.5-7B-Instruct (4-bit)  | 33 / 8 / 8                     | 3,8 s                      |
+| Qwen2.5-14B-Instruct (4-bit) | 39 / 6 / 4                     | 9,3 s                      |
+
+- Od 7 netačnih odgovora 7B modela (na pitanja sa odgovorom), 6 je imalo sve potrebne izvore u kontekstu: greške pravi generator, ne pretraga.
+- Razlika 7B / 14B nije statistički pouzdana na 49 pitanja (McNemar, p ≈ 0,18).
+
+Detalji svakog pokretanja su u `results/`.
 
 ## Struktura
 
 ```
 northstar-rag/
 ├── data/
-│   ├── raw/                     # originalni dokument (.docx)
-│   └── processed/               # sve što pipeline generiše (nije u Git-u, može se ponovo napraviti):
-│                                #   Markdown dokumenta, chunk-ovi (.jsonl, po strategiji),
-│                                #   izdvojene slike + figures.json, keš opisa slika (po VLM modelu)
-├── eval/
-│   └── eval_questions.json      # kontrolna pitanja: očekivani odgovor, izvori (sekcija/slika), kategorija
+│   ├── raw/NorthStar_Knowledge_Base.docx
+│   └── processed/                     # generisano; u git-u samo ulazi potrebni za ponovljivost:
+│                                      #   chunks_section.jsonl, figures/figures.json,
+│                                      #   figure_descriptions_*.json, decompose_*.json
+├── eval/eval_questions.json           # 49 pitanja: question, expected_answer, sources, category
 ├── notebooks/
-│   ├── 01_explore_document.ipynb   # pregled dokumenta, slika i evaluacionog skupa
-│   ├── 02_chunks.ipynb             # automatske provere chunk-ova (pokrivenost, TOC, arhiva, tabele)
-│   └── 03_experiments.ipynb        # analiza rezultata eksperimenata po pitanjima
-├── results/                     # rezultati evaluacije, jedan folder po pokretanju (<datum_vreme>_<ime>/):
-│                                #   per_question.csv, summary.csv, mrr_by_category.csv, abstain.csv
+│   ├── 01_explore_document.ipynb
+│   ├── 02_chunks.ipynb
+│   ├── 03_experiments.ipynb           # analiza rezultata pretrage
+│   └── 04_generation.ipynb            # generisanje odgovora u Google Colab-u (GPU)
+├── results/                           # jedan folder po pokretanju: <datum_vreme>_<ime>/
 ├── src/
-│   ├── config.py                # putanje, modeli, memoi koji menjaju sekcije (OVERRIDES)
-│   ├── parse.py                 # .docx → Markdown (Docling) i izdvajanje slika sa naslovima
-│   ├── chunking.py              # chunking: fiksna dužina i po sekcijama, metapodaci (status, office, ...)
-│   ├── figures.py               # opisi slika preko Gemini API-ja (sa kešom) i chunk-ovi od opisa
-│   ├── indexing.py              # embedding (BGE-M3), indeksiranje u Qdrant i dense pretraga
-│   ├── retrieval.py             # proširenje rezultata (memoi, slike) i reranker
-│   └── evaluate.py              # metrike, eksperimenti 1–6 i čuvanje rezultata
-├── .env.example                 # šablon za API ključeve i podešavanja (kopirati u .env)
+│   ├── config.py                      # putanje, modeli, parametri, memoi koji menjaju sekcije (OVERRIDES)
+│   ├── parse.py                       # .docx → Markdown (Docling) + slike sa naslovima
+│   ├── chunking.py                    # chunking (fiksna dužina / po sekcijama) i metapodaci
+│   ├── figures.py                     # opisi slika preko Gemini API-ja (keš po modelu)
+│   ├── indexing.py                    # BGE-M3 dense + sparse, Qdrant, hibridna i višeupitna pretraga,
+│   │                                  #   čuvanje indeksa (otisak chunk-ova u imenu kolekcije)
+│   ├── retrieval.py                   # proširenje (memoi, slike) i reranker
+│   ├── decompose.py                   # razlaganje pitanja na podpitanja (Gemini, grupno, keširano)
+│   ├── evaluate.py                    # metrike pretrage i eksperimenti 1–11
+│   ├── generate.py                    # prompt, kontekst sa statusom izvora, HF model, JSON odgovor
+│   └── evaluate_text.py               # metrike odgovora bez LLM-a
+├── .env.example                       # šablon za ključeve (kopirati u .env)
 ├── requirements.txt
-└── setup.ps1                    # podešavanje okruženja na Windowsu
+└── setup.ps1                          # podešavanje okruženja na Windowsu
 ```
 
-`qdrant_data/` (lokalna vektorska baza) i `.venv/` se prave automatski i nisu u Git-u.
+`qdrant_data/` (lokalna baza), `.venv/` i `.env` se ne čuvaju u git-u.
 
 ## Podešavanje (Windows, VS Code)
 
-Potrebno: **Python 3.12**, **Git**, **VS Code** sa ekstenzijama *Python* i *Jupyter*.
-
 ```powershell
-# u VS Code terminalu, iz foldera projekta
-powershell -ExecutionPolicy Bypass -File setup.ps1
-```
-
-Skripta pravi virtuelno okruženje `.venv`, instalira pakete i pravi `.env` iz šablona.
-Zatim u VS Code-u: `Ctrl+Shift+P` → *Python: Select Interpreter* → `.venv`.
-
-Ručno, ako skripta ne radi:
-
-```powershell
-py -3.12 -m venv .venv
+.\setup.ps1                                   # ili ručno: python -m venv .venv; pip install -r requirements.txt
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned   # jednom, ako aktivacija ne radi
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-copy .env.example .env
+copy .env.example .env                        # pa upisati ključeve
 ```
-
-## Pokretanje
-
-```powershell
-python src/parse.py        # 1. .docx → Markdown + slike                    (~10 s)
-python src/figures.py      # 2. opisi slika (Gemini API, samo prvi put)     (~1 min)
-python src/chunking.py     # 3. chunk-ovi za obe strategije                  (nekoliko s)
-python src/evaluate.py     # 4. svi eksperimenti + rezultati u results/     (~15 min na CPU)
-```
-
-Pojedinačni eksperimenti: `python src/evaluate.py --only 5_expansion 6_rerank` (spisak: `--help`).
-Prvo pokretanje preuzima modele BGE-M3 i reranker (~2 GB svaki) u Hugging Face keš.
-
-## Eksperimenti
-
-| Ime | Šta se menja u odnosu na prethodni |
-|---|---|
-| `1_fixed` | baseline: chunk-ovi fiksne dužine (300 reči, preklapanje 50), dense pretraga |
-| `2_section` | chunking po sekcijama dokumenta (tabele se ne seku, FAQ po pitanjima) |
-| `3_section_path` | putanja naslova dodata u tekst za embedding |
-| `3b_section_path_filter` | filter: zastarela pravila (pogl. 17) isključena iz pretrage |
-| `4_figures` | dodati chunk-ovi sa opisima slika |
-| `5_expansion` | uz rezultat se dodaju povezani memoi i slike na koje upućuje |
-| `6_rerank` | 20 kandidata preuređuje cross-encoder (bge-reranker-v2-m3) |
 
 ## API ključevi
 
-Ključevi idu samo u `.env` (taj fajl je u `.gitignore` i nikad ne ide na GitHub).
-Repozitorijum je javan, pa ključ nikad ne pišite direktno u kod ili notebook.
-Za opise slika potreban je `GEMINI_API_KEY` (besplatan ključ iz Google AI Studio).
+U `.env` (nikad u kod, notebook ili commit – repo je javan):
+
+- `GEMINI_API_KEY` – opisi slika (`figures.py`) i razlaganje pitanja (`decompose.py`), besplatni nivo;
+- `HF_TOKEN` – preuzimanje modela sa Hugging Face-a.
+
+U Colab-u se `HF_TOKEN` unosi preko **Secrets** (ikonica ključa), ne u ćeliju.
+
+Besplatni Gemini ima dnevne kvote po modelu (npr. 20 zahteva dnevno za Flash modele), pa se svi
+LLM pozivi keširaju; `decompose.py` šalje 10 pitanja po zahtevu.
+
+## Pokretanje
+
+**Priprema podataka** (lokalno):
+
+```powershell
+python src/parse.py          # .docx → Markdown + slike                     (~10 s)
+python src/figures.py        # opisi slika (Gemini, samo prvi put)
+python src/chunking.py       # delovi dokumenta za obe strategije
+python src/decompose.py      # podpitanja za eksp. 10–11 (Gemini, samo prvi put)
+```
+
+**Pretraga – eksperimenti** (lokalno):
+
+```powershell
+python src/evaluate.py                               # svi eksperimenti
+python src/evaluate.py --only 4_figures 8_hybrid     # samo navedeni (spisak: --help)
+```
+
+Indeksi se čuvaju u `qdrant_data/` i prave ponovo samo kad se promene delovi dokumenta.
+Eksperimenti sa rerankerom (6, 9) su spori na CPU-u (~10–15 s po pitanju).
+
+**Generisanje odgovora** (Google Colab, T4 GPU): otvoriti `notebooks/04_generation.ipynb`,
+u ćeliji sa podešavanjima izabrati `GEN_MODEL` i `RUN_NAME`, pa *Run all*. Rezultat
+(`answers.jsonl`, `run_config.json`) se preuzima i raspakuje u `results/`.
+
+**Evaluacija odgovora** (lokalno):
+
+```powershell
+python src/evaluate_text.py                                    # najnovije generisanje
+python src/evaluate_text.py 2026-10-14_1022_gen_hybrid_qwen7b  # određeno pokretanje
+```
+
+Ako u folderu pokretanja postoji `manual_grades.csv` (`id, manual_grade, note`), dobija se i
+tabela „ručna ocena × pokrivenost izvora“ (greške pretrage naspram grešaka generisanja).
+
+## Eksperimenti
+
+**Pretraga** (`evaluate.py`):
+
+| Ime                        | Šta se menja                                                               |
+| -------------------------- | --------------------------------------------------------------------------- |
+| `1_fixed`                | baseline: delovi fiksne dužine (300 reči, preklapanje 50), dense pretraga |
+| `2_section`              | chunking po sekcijama (tabele se ne seku, FAQ po pitanjima)                 |
+| `3_section_path`         | putanja naslova dodata u tekst za embedding                                 |
+| `3b_section_path_filter` | zastarela pravila (pogl. 17) isključena iz pretrage                        |
+| `4_figures`              | dodati delovi sa opisima slika                                              |
+| `5_expansion`            | uz rezultat se dodaju povezani memoi i slike                                |
+| `6_rerank`               | 20 kandidata preuređuje cross-encoder (bge-reranker-v2-m3)                 |
+| `4b_dense_m3`            | kontrola: isto kao 4, dense iz FlagEmbedding-a                              |
+| `7_sparse`               | samo BGE-M3 sparse                                                          |
+| `8_hybrid`               | dense + sparse, spojeni RRF-om                                              |
+| `9_hybrid_rerank`        | hibrid → proširenje → reranker                                           |
+| `10_decomp`              | pitanje + podpitanja (LLM), dense, RRF – porediti sa 4                     |
+| `11_decomp_hybrid`       | pitanje + podpitanja (LLM), hibrid, RRF – porediti sa 8                    |
+
+**Generisanje** (`04_generation.ipynb`): `gen_hybrid_qwen7b`, `gen_hybrid_qwen14b` – pretraga kao eksp. 8, top 5.
+
+## Metrike
+
+**Pretraga** (`evaluate.py`):
+
+- Hit@k, Recall@k, MRR, nDCG@10 – na nivou izvora (sekcija ili slika);
+- pokrivenost svih izvora (all_sources@k) – da li su svi potrebni izvori u top k;
+- cover_rank – pozicija poslednjeg potrebnog izvora (koliki k je potreban);
+- superseded@5, words@5, latencija; `multi_source.csv` – samo pitanja sa 2+ izvora.
+
+**Odgovori** (`evaluate_text.py`, bez LLM-a):
+
+- tačno odbijanje (abstain recall) i pogrešno odbijanje (false abstain rate);
+- izmišljeni brojevi (unsupported numbers) – broj u odgovoru kog nema u datim izvorima;
+- preciznost i odziv citata (citation precision / recall);
+- poklapanje brojeva sa očekivanim odgovorom (number recall) – grub signal;
+- pokrivenost izvora u kontekstu (context coverage).
