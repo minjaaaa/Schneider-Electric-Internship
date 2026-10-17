@@ -10,6 +10,7 @@ DATA_RAW = ROOT / "data" / "raw"
 DATA_PROCESSED = ROOT / "data" / "processed"
 EVAL_DIR = ROOT / "eval"
 RESULTS_DIR = ROOT / "results"
+GEN_RESULTS_DIR = ROOT / "results_generator"      # generisanje (notebook 04/05, evaluate_text.py)
 QDRANT_PATH = ROOT / "qdrant_data"
 
 KB_DOCX = DATA_RAW / "NorthStar_Knowledge_Base.docx"
@@ -26,7 +27,7 @@ LLM_MODEL = "gemini-3.8-flash"     # tekstualni LLM za razlaganje pitanja (eksp.
 LLM_PAUSE_S = 5                   # pauza između poziva LLM-a (besplatni nivo ima limit zahteva u minutu)
 LLM_BATCH_SIZE = 10               # pitanja po jednom pozivu LLM-a (49 pitanja = 5 poziva)
 
-for d in (DATA_PROCESSED, RESULTS_DIR):
+for d in (DATA_PROCESSED, RESULTS_DIR, GEN_RESULTS_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
 # Memoi koji menjaju pravila iz sekcija (sekcija -> lista memoa).
