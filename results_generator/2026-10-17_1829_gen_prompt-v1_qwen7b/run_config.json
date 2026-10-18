@@ -1,0 +1,9 @@
+{
+  "generator": "Qwen/Qwen2.5-7B-Instruct",
+  "top_k": 5,
+  "retriever": "8_hybrid (exclude_superseded, with_path, figures)",
+  "context_from": "2026-10-14_1022_gen_hybrid_qwen7b",
+  "prompt_version": "v1",
+  "prompt_hash": "03d3e8f8",
+  "max_new_tokens": 700
+}

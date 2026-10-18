@@ -104,14 +104,14 @@ def error_attribution(df: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     from chunking import load_jsonl
-    from config import DATA_PROCESSED, RESULTS_DIR
+    from config import DATA_PROCESSED, GEN_RESULTS_DIR
     from figures import figure_chunks
 
     # putanja se računa u odnosu na results/ projekta, a ne u odnosu na folder iz kog je skripta pokrenuta
     if len(sys.argv) > 1:
-        run_dir = RESULTS_DIR / Path(sys.argv[1]).name      # prihvata i "results/<ime>" i samo "<ime>"
+        run_dir = GEN_RESULTS_DIR / Path(sys.argv[1]).name     # prihvata i "results/<ime>" i samo "<ime>"
     else:
-        run_dir = max(RESULTS_DIR.glob("*_gen_*"))          # bez argumenta: najnovije generisanje (ime počinje datumom)
+        run_dir = max(GEN_RESULTS_DIR.glob("*_gen_*"))         # bez argumenta: najnovije generisanje (ime počinje datumom)
     print(f"Evaluiram: {run_dir}")
     rows = [json.loads(line) for line in open(run_dir / "answers.jsonl", encoding="utf-8")]
     chunks = load_jsonl(DATA_PROCESSED / "chunks_section.jsonl") + figure_chunks()

@@ -109,17 +109,15 @@ def format_context(chunks: list[dict], style: str = "numbered") -> str:
     numbered (v1): '[i] Source 5.2 | ...'  -  labeled (v2): 'Source: 5.2 | Section: ... | Status: ...', bez rednog broja."""
     blocks = []
     for i, c in enumerate(chunks, start=1):
+        meta = c["status"]
+        if c.get("overridden_by"):
+            meta += f"; amended by: {', '.join(c['overridden_by'])}"
         if style == "numbered":
-            meta = f"status: {c['status']}"
-            if c.get("overridden_by"):
-                meta += f"; amended by: {', '.join(c['overridden_by'])}"
-            blocks.append(f"[{i}] Source {source_label(c)} | {c['heading_path']} | {meta}\n{c['text']}")
+            blocks.append(f"[{i}] Source {source_label(c)} | {c['heading_path']} | status: {meta}\n{c['text']}")
         else:
-            meta = f"Status: {c['status']}"
-            if c.get("overridden_by"):
-                meta += f"; amended by: {', '.join(c['overridden_by'])}"
-            blocks.append(f"Source: {source_label(c)} | Section: {c['heading_path']} | {meta}\n{c['text']}")
-    return "\n\n".join(blocks) if style == "numbered" else "\n\n---\n\n".join(blocks)
+            blocks.append(f"Source: {source_label(c)} | Section: {c['heading_path']} | Status: {meta}\n{c['text']}")
+    sep = "\n\n" if style == "numbered" else "\n\n---\n\n"
+    return sep.join(blocks)
 
 
 def build_messages(question: str, chunks: list[dict], prompt_version: str = "v1") -> list[dict]:
@@ -159,7 +157,7 @@ def parse_response(text: str) -> dict:
     citations = data.get("citations") or []
     return {
         "answer": str(data.get("answer", "")).strip(),
-        "citations": [re.sub(r"^Source:?\s*", "", str(c)).strip() for c in citations if str(c).strip()],
+        "citations": [re.sub(r"^Source:?\s*", "", str(c)).split("|")[0].strip() for c in citations if str(c).strip()],
         "evidence": [str(e).strip() for e in (data.get("evidence") or [])],
         "abstained": bool(data.get("abstained", False)),
         "parse_error": False,
@@ -168,29 +166,42 @@ def parse_response(text: str) -> dict:
 
 
 class HFChatModel:
-    """Otvoreni instruct model sa Hugging Face-a (za Colab GPU). Poziv: model(messages) -> tekst."""
+    """Otvoreni instruct model sa Hugging Face-a (za Colab GPU). Poziv: model(messages) -> tekst.
+    multimodal=True za modele koji se učitavaju kao AutoModelForMultimodalLM (npr. Gemma 4)."""
 
-    def __init__(self, model_id: str, load_in_4bit: bool = True, max_new_tokens: int = 400):
+    def __init__(self, model_id: str, load_in_4bit: bool = True, max_new_tokens: int = 400,
+                 multimodal: bool = False, compute_dtype: str = "float16"):
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+        from transformers import BitsAndBytesConfig
 
         self.model_id = model_id
         self.max_new_tokens = max_new_tokens
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-        quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16) if load_in_4bit else None
-        self.model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto",
-                                                          quantization_config=quant, torch_dtype=torch.float16)
+        self.multimodal = multimodal
+        dtype = getattr(torch, compute_dtype)
+        quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=dtype) if load_in_4bit else None
+        if multimodal:
+            from transformers import AutoModelForMultimodalLM, AutoProcessor
+            self.tokenizer = AutoProcessor.from_pretrained(model_id)      # processor ima isti apply_chat_template/decode
+            model_cls = AutoModelForMultimodalLM
+        else:
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(model_id)
+            model_cls = AutoModelForCausalLM
+        self.model = model_cls.from_pretrained(model_id, device_map="auto",
+                                               quantization_config=quant, torch_dtype=dtype)
 
     def __call__(self, messages: list[dict]) -> str:
         import torch
-        inputs = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True,
-                                                    return_tensors="pt", return_dict=True).to(self.model.device)
-        with torch.no_grad():           # raspakuje recnik u argumente za model.generate()
+        extra = {"enable_thinking": False} if self.multimodal else {}   # Gemma 4: bez režima razmišljanja
+        inputs = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True,
+                                                    return_tensors="pt", return_dict=True, **extra).to(self.model.device)
+        with torch.no_grad():
             output = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False,
-                                         pad_token_id=self.tokenizer.eos_token_id)
-        n_prompt = inputs["input_ids"].shape[1]                  # dužina prompta u tokenima
+                                         pad_token_id=self.tokenizer.tokenizer.eos_token_id if self.multimodal
+                                         else self.tokenizer.eos_token_id)
+        n_prompt = inputs["input_ids"].shape[1]
         return self.tokenizer.decode(output[0][n_prompt:], skip_special_tokens=True)
-
+    
 def answer_question(question: str, chunks: list[dict], llm, prompt_version: str = "v1") -> dict:
     """Generiše odgovor za jedno pitanje na osnovu datih chunkova (čuva i ono što je model video)."""
     start = time.perf_counter()
