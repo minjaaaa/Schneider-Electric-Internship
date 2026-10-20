@@ -1,0 +1,556 @@
+{
+  "Q01": [
+    {
+      "text": "The hotel cap in Singapore is 220 EUR per night",
+      "core": true
+    }
+  ],
+  "Q02": [
+    {
+      "text": "The current hotel cap for Lisbon is 160 EUR per night",
+      "core": true
+    },
+    {
+      "text": "The 160 EUR cap applies to stays from 1 April 2026",
+      "core": true
+    },
+    {
+      "text": "The previous Lisbon cap was 140 EUR",
+      "core": true
+    },
+    {
+      "text": "The change comes from memo PT-2026-02",
+      "core": false
+    }
+  ],
+  "Q03": [
+    {
+      "text": "The line manager must approve",
+      "core": true
+    },
+    {
+      "text": "The cost-centre owner must approve",
+      "core": true
+    }
+  ],
+  "Q04": [
+    {
+      "text": "A purchase order in ProcureNow is required",
+      "core": true
+    },
+    {
+      "text": "1 written quote is required",
+      "core": true
+    },
+    {
+      "text": "Approval is by the budget owner",
+      "core": true
+    }
+  ],
+  "Q05": [
+    {
+      "text": "NSS employees can work remotely up to 3 days per week",
+      "core": true
+    },
+    {
+      "text": "This applies since 1 March 2026",
+      "core": true
+    },
+    {
+      "text": "Tuesday is the mandatory office day",
+      "core": true
+    },
+    {
+      "text": "The change comes from memo PT-2026-04",
+      "core": false
+    }
+  ],
+  "Q06": [
+    {
+      "text": "Office-based NSFS employees have 1 remote day per week",
+      "core": true
+    }
+  ],
+  "Q07": [
+    {
+      "text": "Up to 20 working days per year",
+      "core": true
+    },
+    {
+      "text": "At most 10 consecutive working days",
+      "core": true
+    }
+  ],
+  "Q08": [
+    {
+      "text": "NSS offers relocation support of up to 4,000 EUR",
+      "core": true
+    }
+  ],
+  "Q09": [
+    {
+      "text": "NSFS employees can carry over up to 3 annual leave days",
+      "core": true
+    },
+    {
+      "text": "Carried-over days must be taken by 30 April",
+      "core": true
+    }
+  ],
+  "Q10": [
+    {
+      "text": "The learning budget is 1,200 EUR per year",
+      "core": true
+    },
+    {
+      "text": "Items above 500 EUR require manager approval",
+      "core": true
+    }
+  ],
+  "Q11": [
+    {
+      "text": "Claims must be submitted by the 15th of the month following the end of the quarter",
+      "core": true
+    }
+  ],
+  "Q12": [
+    {
+      "text": "The domestic per diem for a trip with an overnight stay is 35 EUR per day",
+      "core": true
+    }
+  ],
+  "Q13": [
+    {
+      "text": "The guest Wi-Fi in Prague is NS-Guest-PRG",
+      "core": true
+    }
+  ],
+  "Q14": [
+    {
+      "text": "The answer says the knowledge base does not contain this information",
+      "core": true
+    },
+    {
+      "text": "The answer does not give a specific value or name for the Lisbon guest Wi-Fi",
+      "core": true
+    }
+  ],
+  "Q15": [
+    {
+      "text": "The Orion meeting room has 12 seats",
+      "core": true
+    },
+    {
+      "text": "The room is equipped for video conferencing",
+      "core": true
+    }
+  ],
+  "Q16": [
+    {
+      "text": "The Security Hotline extension is 7777",
+      "core": true
+    }
+  ],
+  "Q17": [
+    {
+      "text": "The badge replacement fee in Krakow is 12 EUR",
+      "core": true
+    }
+  ],
+  "Q18": [
+    {
+      "text": "The minimum password length for administrator accounts is 20 characters",
+      "core": true
+    }
+  ],
+  "Q19": [
+    {
+      "text": "RESTRICTED documents may not be printed",
+      "core": true
+    }
+  ],
+  "Q20": [
+    {
+      "text": "The Premium P1 first response time for Polaris Edge is 1 hour",
+      "core": true
+    },
+    {
+      "text": "This target applies 24/7",
+      "core": true
+    }
+  ],
+  "Q21": [
+    {
+      "text": "The Standard P1 first response time is 4 hours",
+      "core": true
+    }
+  ],
+  "Q22": [
+    {
+      "text": "SAML single sign-on was introduced in Polaris Cloud version 2025.3",
+      "core": true
+    }
+  ],
+  "Q23": [
+    {
+      "text": "Gifts received may be worth at most 50 EUR per gift",
+      "core": true
+    },
+    {
+      "text": "At most 150 EUR per year from the same business partner",
+      "core": true
+    },
+    {
+      "text": "Gifts above 25 EUR must be registered",
+      "core": true
+    }
+  ],
+  "Q24": [
+    {
+      "text": "Client entertainment is limited to 80 EUR per person",
+      "core": true
+    },
+    {
+      "text": "The limit includes drinks",
+      "core": true
+    }
+  ],
+  "Q25": [
+    {
+      "text": "The answer says the knowledge base does not contain this information",
+      "core": true
+    },
+    {
+      "text": "The answer does not give a specific value or name for the annual revenue",
+      "core": true
+    }
+  ],
+  "Q26": [
+    {
+      "text": "The answer says the knowledge base does not contain this information",
+      "core": true
+    },
+    {
+      "text": "The answer does not give a specific value or name for the dental insurance provider",
+      "core": true
+    }
+  ],
+  "Q27": [
+    {
+      "text": "The probation period at NSFS is 6 months",
+      "core": true
+    }
+  ],
+  "Q28": [
+    {
+      "text": "Mandatory e-learnings must be completed by Day 10",
+      "core": true
+    }
+  ],
+  "Q29": [
+    {
+      "text": "The overtime rate for NSFS employees on Sundays is 200%",
+      "core": true
+    }
+  ],
+  "Q30": [
+    {
+      "text": "No, dogs are not allowed in the Austin office",
+      "core": true
+    },
+    {
+      "text": "Dogs are allowed only in the Lisbon office",
+      "core": true
+    },
+    {
+      "text": "In Lisbon, dogs are allowed on Fridays",
+      "core": true
+    }
+  ],
+  "Q31": [
+    {
+      "text": "L3 means Senior",
+      "core": true
+    },
+    {
+      "text": "L3 is a career level",
+      "core": true
+    },
+    {
+      "text": "L3 is not a performance rating or an incident severity",
+      "core": true
+    }
+  ],
+  "Q32": [
+    {
+      "text": "Expense claims must be submitted within 30 days of the end of the trip or the date of purchase",
+      "core": true
+    }
+  ],
+  "Q33": [
+    {
+      "text": "Raw data is kept for 13 months in Polaris Cloud",
+      "core": true
+    },
+    {
+      "text": "Aggregates are kept for 5 years",
+      "core": true
+    }
+  ],
+  "Q34": [
+    {
+      "text": "A secondary caregiver gets 6 weeks of parental leave",
+      "core": true
+    }
+  ],
+  "Q35": [
+    {
+      "text": "The answer says the knowledge base does not contain this information",
+      "core": true
+    },
+    {
+      "text": "The answer says there is no Berlin office, or that the knowledge base has no information about one",
+      "core": true
+    },
+    {
+      "text": "The answer does not describe parking at a Berlin office",
+      "core": true
+    }
+  ],
+  "Q36": [
+    {
+      "text": "Expense approvals must be completed by the 20th of the month",
+      "core": true
+    }
+  ],
+  "Q37": [
+    {
+      "text": "No, a T2 technician cannot use Work from Anywhere",
+      "core": true
+    },
+    {
+      "text": "T grades are used for NSFS technical (field) roles",
+      "core": true
+    },
+    {
+      "text": "NSFS field roles are not eligible for Work from Anywhere",
+      "core": true
+    }
+  ],
+  "Q38": [
+    {
+      "text": "No, a public AI chatbot may not be used to summarise a customer contract",
+      "core": true
+    },
+    {
+      "text": "Customer contracts are classified as CONFIDENTIAL",
+      "core": true
+    },
+    {
+      "text": "Public AI tools may be used only with PUBLIC data",
+      "core": true
+    },
+    {
+      "text": "NorthStar Assistant should be used instead",
+      "core": true
+    }
+  ],
+  "Q39": [
+    {
+      "text": "The Sunday rate is 200% of the hourly rate",
+      "core": true
+    },
+    {
+      "text": "It is paid out on the 15th of the following month",
+      "core": true
+    },
+    {
+      "text": "It is paid together with the salary",
+      "core": true
+    }
+  ],
+  "Q40": [
+    {
+      "text": "50% of the relocation package must be repaid",
+      "core": true
+    },
+    {
+      "text": "A pro-rata share of the certification cost must be repaid",
+      "core": true
+    },
+    {
+      "text": "Pro-rata repayment applies to certifications costing more than 1,000 EUR",
+      "core": true
+    }
+  ],
+  "Q41": [
+    {
+      "text": "An engineer will be on site within 24 hours",
+      "core": true
+    },
+    {
+      "text": "The 24-hour target applies because the site is in the EU",
+      "core": true
+    },
+    {
+      "text": "The engineer is sent by NSFS",
+      "core": true
+    },
+    {
+      "text": "NSFS maintains Polaris Edge",
+      "core": true
+    }
+  ],
+  "Q42": [
+    {
+      "text": "The loss must be reported immediately",
+      "core": true
+    },
+    {
+      "text": "The loss must be reported at the latest within 1 hour",
+      "core": true
+    },
+    {
+      "text": "The report goes to the Security Hotline",
+      "core": true
+    },
+    {
+      "text": "The Security Hotline extension is 7777",
+      "core": true
+    },
+    {
+      "text": "The Security Hotline is available 24/7",
+      "core": true
+    }
+  ],
+  "Q43": [
+    {
+      "text": "No, a same-day replacement is not possible in Toronto",
+      "core": true
+    },
+    {
+      "text": "The Toronto office has no IT Bar",
+      "core": true
+    },
+    {
+      "text": "Devices are replaced by courier",
+      "core": true
+    },
+    {
+      "text": "Courier replacement takes 3 business days",
+      "core": true
+    }
+  ],
+  "Q44": [
+    {
+      "text": "A RESTRICTED document may not be e-mailed to a customer",
+      "core": true
+    },
+    {
+      "text": "RESTRICTED information may never be shared externally",
+      "core": true
+    },
+    {
+      "text": "A RESTRICTED document may not be printed",
+      "core": true
+    }
+  ],
+  "Q45": [
+    {
+      "text": "The hotel cap in Lisbon is 160 EUR per night",
+      "core": true
+    },
+    {
+      "text": "The 160 EUR cap applies to stays from 1 April 2026",
+      "core": true
+    },
+    {
+      "text": "The per diem is the international rate of 55 EUR per day",
+      "core": true
+    },
+    {
+      "text": "The per diem is reduced by 10 EUR if breakfast is included",
+      "core": true
+    },
+    {
+      "text": "The 160 EUR cap comes from memo PT-2026-02",
+      "core": false
+    }
+  ],
+  "Q46": [
+    {
+      "text": "Two memos changed the rules",
+      "core": true
+    },
+    {
+      "text": "Memo PT-2026-02 raised the Lisbon hotel cap from 140 to 160 EUR",
+      "core": true
+    },
+    {
+      "text": "The Lisbon change applies to stays from 1 April 2026",
+      "core": true
+    },
+    {
+      "text": "Memo PT-2026-04 raised NSS remote work from 2 to 3 days per week",
+      "core": true
+    },
+    {
+      "text": "The remote work change applies from 1 March 2026",
+      "core": true
+    }
+  ],
+  "Q47": [
+    {
+      "text": "Prague has 38 underground parking spaces",
+      "core": true
+    },
+    {
+      "text": "Prague parking spaces are booked in SpaceFinder",
+      "core": true
+    },
+    {
+      "text": "Prague has 6 EV chargers",
+      "core": true
+    },
+    {
+      "text": "Lisbon has no company parking",
+      "core": true
+    },
+    {
+      "text": "Lisbon offers a 30% discount at the public garage next door",
+      "core": true
+    }
+  ],
+  "Q48": [
+    {
+      "text": "The lost badge must be reported within 24 hours",
+      "core": true
+    },
+    {
+      "text": "It is reported to reception",
+      "core": true
+    },
+    {
+      "text": "The replacement fee is 18 EUR",
+      "core": true
+    },
+    {
+      "text": "The fee is charged in SGD",
+      "core": true
+    }
+  ],
+  "Q49": [
+    {
+      "text": "Lisbon has the most public holidays",
+      "core": true
+    },
+    {
+      "text": "Lisbon has 14 public holidays per year",
+      "core": true
+    },
+    {
+      "text": "Lisbon has 13 national holidays plus 1 municipal holiday",
+      "core": true
+    }
+  ]
+}

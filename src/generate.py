@@ -192,15 +192,20 @@ class HFChatModel:
 
     def __call__(self, messages: list[dict]) -> str:
         import torch
-        extra = {"enable_thinking": False} if self.multimodal else {}   # Gemma 4: bez režima razmišljanja
+        extra = {"enable_thinking": False} if self.multimodal else {}           # Gemma 4: bez režima razmišljanja
         inputs = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True,
                                                     return_tensors="pt", return_dict=True, **extra).to(self.model.device)
+        tok = self.tokenizer.tokenizer if self.multimodal else self.tokenizer   # processor ima tokenizer unutra
         with torch.no_grad():
             output = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False,
-                                         pad_token_id=self.tokenizer.tokenizer.eos_token_id if self.multimodal
-                                         else self.tokenizer.eos_token_id)
-        n_prompt = inputs["input_ids"].shape[1]
-        return self.tokenizer.decode(output[0][n_prompt:], skip_special_tokens=True)
+                                         pad_token_id=tok.eos_token_id)
+        new_tokens = output[0][inputs["input_ids"].shape[1]:]                   # samo ono što je model generisao
+        if not self.multimodal:
+            return self.tokenizer.decode(new_tokens, skip_special_tokens=True)
+        # Gemma 4: ukloni blok razmišljanja <|channel>thought ... <channel|>, pa preostale posebne oznake
+        text = self.tokenizer.decode(new_tokens, skip_special_tokens=False)
+        text = re.sub(r"<\|channel>.*?<channel\|>", "", text, flags=re.DOTALL)
+        return re.sub(r"<\|?[a-z_]+\|?>", "", text).strip()
     
 def answer_question(question: str, chunks: list[dict], llm, prompt_version: str = "v1") -> dict:
     """Generiše odgovor za jedno pitanje na osnovu datih chunkova (čuva i ono što je model video)."""
