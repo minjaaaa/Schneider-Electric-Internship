@@ -1,0 +1,286 @@
+﻿id,category,question,expected_answer,answer,citations,abstained,parse_error,manual_grade,note
+Q01,table,What is the hotel cap per night in Singapore?,220 EUR,The hotel cap for Singapore is 220 EUR per night (including taxes but excluding breakfast) [1].,"1, 2",False,False,correct,
+Q02,override,What is the current hotel cap for Lisbon?,160 EUR for stays from 1 April 2026 (memo PT-2026-02); previously 140 EUR,"The hotel cap for Lisbon is 160 EUR per night. (Note: The initial cap was 140 EUR, but was updated by Memo PT-2026-02).","1, 2",False,False,correct,
+Q03,image,"Who must approve an expense claim of 3,200 EUR?",Line manager and cost-centre owner,"For an expense claim of 3,200 EUR, approval is required by the Line manager + Cost-centre owner.","2, 4",False,False,correct,
+Q04,confusable,"What is required to buy a service worth 3,200 EUR?","Purchase order in ProcureNow with 1 written quote, approved by budget owner","For a contract value of 3,200 EUR (excluding VAT), a purchase order in ProcureNow and one written quote are required, with approval from the budget owner. Note that these rules apply to goods and services bought for the company, not for individual travel and expense costs.",4,False,False,correct,
+Q05,image+override,How many days per week can NSS employees work remotely?,Up to 3 days since 1 March 2026 (memo PT-2026-04); Tuesday is the office day,NSS employees may work remotely on up to three (3) days per week.,"3, 1",False,False,correct,
+Q06,confusable,How many remote days do office-based NSFS employees have?,1 day per week,Office-based NSFS employees may work remotely on one day per week.,"1, 2, 5",False,False,correct,
+Q07,text,How many days per year can I work from abroad?,"20 working days, max. 10 consecutive","Employees of both entities may work temporarily from another country for up to 20 working days per calendar year, with a maximum of 10 consecutive working days.","1, 2",False,False,correct,
+Q08,confusable,How much relocation support does NSS offer?,"Up to 4,000 EUR","NSS offers a relocation support package of up to 4,000 EUR, which covers moving costs, temporary housing for up to 30 days, and one visa application.","1, 5",False,False,correct,
+Q09,confusable,How many annual leave days can NSFS employees carry over?,"Up to 3 days, to be taken by 30 April","NSFS employees can carry over up to 3 unused days, which must be taken by 30 April of the following year.","1, 2, 4",False,False,correct,
+Q10,superseded-trap,How large is the learning budget?,"1,200 EUR per year; manager approval above 500 EUR","Every employee has a personal learning budget of 1,200 EUR per calendar year. This applies to both NSS and NSFS roles.","1, 3",False,False,correct,
+Q11,text,By when must wellness allowance claims be submitted?,By the 15th of the month following the end of the quarter,Wellness allowance claims must be submitted by the 15th of the month following the end of the quarter.,2,False,False,correct,
+Q12,superseded-trap,What is the domestic per diem for an overnight trip?,35 EUR per day,The per diem for a domestic trip with an overnight stay is 35 EUR.,1,False,False,correct,
+Q13,image,What is the name of the guest Wi-Fi in the Prague office?,NS-Guest-PRG,The guest Wi-Fi in the Prague office is named NS-Guest-PRG.,"1, 3",False,False,correct,
+Q14,abstain,What is the name of the guest Wi-Fi in the Lisbon office?,ABSTAIN - not in the knowledge base,The guest network names differ by office and are displayed on posters at reception.,"2, 4",False,False,partial,"ne izmišlja ime, ali ne kaže jasno da podatka nema; abstained=false"
+Q15,image,How many seats does the Orion meeting room have?,12 seats (VC equipped),The Orion meeting room has 12 seats.,3,False,False,correct,
+Q16,image,What is the extension of the Security Hotline?,ext. 7777,The extension of the Security Hotline is 7777.,3,False,False,correct,
+Q17,templated,What is the badge replacement fee in Krakow?,12 EUR,The badge replacement fee for a lost badge in the Krakow office is 12 EUR.,1,False,False,correct,
+Q18,superseded-trap,What is the minimum password length for administrator accounts?,20 characters,Administrator accounts require passwords of at least 20 characters.,1,False,False,correct,
+Q19,image,Can RESTRICTED documents be printed?,"No, printing is prohibited","No, printing RESTRICTED documents is prohibited.","2, 3",False,False,correct,
+Q20,image,What is the Premium P1 first response time for Polaris Edge?,1 hour (24/7),The Premium P1 first response time for Polaris Edge is 1 hour (24/7) [1].,,False,True,correct,tačno; parse error (nije JSON)
+Q21,confusable,What is the Standard P1 first response time?,4 hours,"The Standard P1 first response time is 4 hours. (Note: For Polaris Edge P1 incidents under Standard support, an on-site engineer is dispatched within 3 business days.)","1, 2",False,False,correct,
+Q22,confusable,Which Polaris Cloud version introduced SAML single sign-on?,2025.3,SAML 2.0 single sign-on was introduced in Polaris Cloud version 2025.3.,"1, 2",False,False,correct,
+Q23,text,What is the limit for gifts received from business partners?,"50 EUR per gift, 150 EUR per year per partner; register gifts above 25 EUR","Employees may accept gifts from the same business partner up to a total of 150 EUR per year, with individual gifts not exceeding 50 EUR. Any gift worth more than 25 EUR must be recorded in the Gift Register within 5 business days.",1,False,False,correct,
+Q24,confusable,What is the per-person limit for client entertainment?,80 EUR including drinks,"Client entertainment is limited to 80 EUR per person, including drinks.",1,False,False,correct,
+Q25,abstain,What is NorthStar's annual revenue?,ABSTAIN - not in the knowledge base,The provided knowledge base does not contain information regarding NorthStar's annual revenue.,"1.1, 1.2, Figure 1, 1.4, 11.4",False,False,correct,
+Q26,abstain,Which dental insurance provider does NorthStar use?,ABSTAIN - not in the knowledge base,"thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought
+thought",,False,True,wrong,degenerisan izlaz (thought x N); parse error
+Q27,table,How long is the probation period at NSFS?,6 months,The probation period at NSFS is 6 months.,1,False,False,correct,
+Q28,image,By which day must mandatory e-learnings be completed?,Day 10,The mandatory e-learnings must be completed by Day 10.,1,False,False,correct,
+Q29,text,What is the overtime rate for NSFS employees on Sundays?,200%,NSFS employees receive overtime pay of 200% of the hourly rate on Sundays.,"1, 2",False,False,correct,
+Q30,multi-hop,Can I bring my dog to the Austin office?,No; dogs are allowed only in Lisbon on Fridays,"No, pets are not allowed in the Austin office. [1]",,False,True,correct,parse error (nije JSON)
+Q31,confusable,What does L3 mean?,"Senior (career level), not a rating or severity","L3 is the career level for a Senior role, where the individual owns features or processes and mentors others. This level is used for NSFS office roles.","1, 4",False,False,correct,
+Q32,superseded-trap,What is the deadline for submitting expense claims?,30 days after trip end or purchase,"Expense claims must be submitted in HR Hub within 30 days of the end of the trip or the date of purchase. Claims submitted between 31 and 90 days late require additional approval by the cost-centre owner, and claims older than 90 days are rejected.","1, 2",False,False,correct,
+Q33,confusable,How long is raw data kept in Polaris Cloud?,13 months; aggregates 5 years,"The default retention of raw data in Polaris Cloud is 13 months, with aggregates kept for 5 years.",2,False,False,correct,
+Q34,table,How many weeks of parental leave does a secondary caregiver get?,6 weeks,A secondary caregiver receives 6 weeks of parental leave on full pay.,"1, 2",False,False,correct,
+Q35,abstain,What is the parking situation at the Berlin office?,ABSTAIN - there is no Berlin office,"I am sorry, but the knowledge base does not contain information regarding the parking situation at the Berlin office.",,True,False,correct,
+Q36,image,By which day must expense approvals be completed to be paid in the next payroll run?,By the 20th of the month,Approvals must be completed by the 20th of the month to be reimbursed with the next payroll run.,"1, 2",False,False,correct,
+Q37,multi-hop,Can a T2 technician use Work from Anywhere?,"No. T grades are NSFS technical (field) roles, and NSFS field roles are not eligible for Work from Anywhere.","No, T2 technicians are not eligible for Work from Anywhere because field roles of NSFS are excluded from this benefit.","1, 2",False,False,correct,
+Q38,multi-hop,Can I use a public AI chatbot to summarise a customer contract?,No. Customer contracts are CONFIDENTIAL and public AI tools may be used only with PUBLIC data; use NorthStar Assistant instead.,"No, you may only use public AI tools with PUBLIC data; for customer contracts (which are classified as CONFIDENTIAL), you must use the NorthStar Assistant.","1, 2, 4",False,False,correct,
+Q39,multi-hop,An NSFS technician works on a Sunday. What rate are they paid and when is it paid out?,"200% of the hourly rate, paid on the 15th of the following month together with the salary.","The NSFS technician is paid 200% of their hourly rate for work on Sundays (plus an on-call allowance of 90 EUR for call-outs), and the payment is made on the 15th of the following month.","3, 4",False,False,correct,dodat on-call dodatak (nepotrebno)
+Q40,multi-hop,"I relocated with NSS support and took a certification costing 1,500 EUR. What must I repay if I resign after 6 months?","50% of the relocation package, plus a pro-rata share of the certification cost (certifications above 1,000 EUR).","Based on the provided documents, you must repay 50% of your relocation package if you resign within 12 months of relocating [1]. However, the records do not specify a repayment requirement for the certification cost, as the pro-rata repayment rule applies to certifications costing more than 1,000 EUR [2].",,False,True,partial,"50% paketa tačno, sertifikat pogrešno; parse error"
+Q41,multi-hop,"A Premium customer's Polaris Edge appliance in Germany is down (P1). How fast will an engineer be on site, and which entity sends them?","Within 24 hours (EU); the engineer comes from NSFS, which maintains Polaris Edge.","For a Premium customer, an on-site engineer will be dispatched within 24 hours (EU) [2]. The source does not specify which entity sends the engineer, though it notes that the customer's Polaris Edge is maintained by NSFS [3, 5].",,False,True,partial,"24h tačno, entitet: kaže da nije navedeno; parse error"
+Q42,text+image,I lost my laptop. How quickly must I report it and what number do I call?,"Immediately, at the latest within 1 hour, via the 24/7 Security Hotline, ext. 7777.","You must report a lost or stolen laptop immediately, and at the latest within one hour, by calling the Security Hotline [1, 2]. The hotline number is displayed on the IT Service Portal [1, 3].",,False,True,partial,nema ext. 7777; parse error
+Q43,text+image,My laptop broke in the Toronto office. Can I get a replacement the same day?,No. Toronto has no IT Bar; devices are replaced by courier (3 business days).,The Toronto office has no IT Bar; devices are replaced by courier.,1,False,False,partial,"nema IT bara, kurir; bez eksplicitnog Ne i 3 dana"
+Q44,text+image,"Can I e-mail a RESTRICTED document to a customer, or print it to take to the meeting?","Neither. RESTRICTED information may never be shared externally, and printing is prohibited.","You may never send a RESTRICTED document via external e-mail, and printing it is prohibited. For printing, you must use the specific handling rules for the RESTRICTED classification.","1, 2, 3",False,False,correct,
+Q45,rule+memo,A Prague-based employee travels to Lisbon for two nights in April 2026. What are the hotel cap and the per diem?,"Hotel cap 160 EUR per night (memo PT-2026-02, stays from 1 April 2026); international per diem 55 EUR per day (minus 10 EUR if breakfast is included).","The hotel cap for Lisbon is 160 EUR per night (as updated by Memo PT-2026-02), and the per diem for an international trip is 55 EUR per day. If breakfast is included in the hotel rate, the per diem is reduced by 10 EUR.","1, 2, 3",False,False,correct,
+Q46,rule+memo,Which rules have changed since version 3.2 of the knowledge base was published?,Two memos: PT-2026-02 raises the Lisbon hotel cap from 140 to 160 EUR (stays from 1 April 2026); PT-2026-04 raises NSS remote work from 2 to 3 days per week (from 1 March 2026).,"The following changes have been made since the publication of version 3.2:
+
+*   **Hybrid Work Rules:** The remote work limit for NorthStar Software (NSS) employees was increased from two days to three days per week (effective 1 March 2026), though Tuesday remains a mandatory in-office day [3].
+*   **Hotel Caps:** The hotel cap for Lisbon was increased from 140 EUR to 160 EUR per night for stays from 1 April 2026 [5].
+*   **Learning Budget:** The learning budget was raised to 1,200 EUR [2].
+*   **Work from Anywhere:** The Work from Anywhere limit was raised to 20 days [2].",,False,True,partial,oba mema + 2 izmišljene izmene (iz 16.1); parse error
+Q47,compare,Compare parking at the Prague and Lisbon offices.,"Prague: 38 underground spaces booked in SpaceFinder, 6 EV chargers. Lisbon: no company parking, 30% discount at the public garage next door.","The Prague office provides 38 underground spaces (bookable via SpaceFinder) and 6 EV chargers, while the Lisbon office offers a 30% discount at the public garage next door.","1, 2",False,False,partial,Lisabon bez no company parking
+Q48,compare,I lost my badge in Singapore. By when must I report it and how much will it cost?,Report it to reception within 24 hours; the replacement fee is 18 EUR (charged in SGD).,"You must report a lost badge to your office reception within 24 hours, and the replacement fee for the Singapore office is 18 EUR (charged in SGD at the monthly rate).","1, 2, 3",False,False,correct,
+Q49,compare,Which office has the most public holidays per year?,"Lisbon, with 14 (13 national + 1 municipal).","The Lisbon office has the most public holidays per year, with 14 (13 national + 1 municipal).",1,False,False,correct,
