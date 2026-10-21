@@ -1,5 +1,5 @@
 """Verodostojnost odgovora (faithfulness / groundedness): da li je svaka tvrdnja u odgovoru podržana
-delovima dokumenta koje je generator dobio (kontekst), a ne očekivanim odgovorom.
+delovima dokumenta koje je generator DOBIO (kontekst), a ne očekivanim odgovorom.
 
 Razlika od tačnosti (judge.py):
   tačnost         - odgovor prema očekivanom odgovoru (da li je rekao ono što treba)
@@ -8,7 +8,7 @@ Odgovor može biti verodostojan a netačan (verno prepiše pogrešan red tabele)
 (pogodi vrednost iz opšteg znanja).
 
 Postupak (jedan poziv ocenjivača po odgovoru):
-  1. ocenjivač razloži odgovor na atomske tvrdnje;
+  1. ocenjivač razloži ODGOVOR na atomske tvrdnje;
   2. za svaku tvrdnju kaže: supported (izvor to kaže, i drugim rečima), contradicted (izvor kaže nešto
      drugo za istu stvar) ili unsupported (nijedan izvor to ne kaže - izmišljeno ili opšte znanje);
   3. metrika se računa u kodu: udeo podržanih tvrdnji po odgovoru i udeo odgovora bez ijedne
@@ -92,17 +92,29 @@ def score_claims(claims: list[dict]) -> dict:
 
 
 NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
+# nazivi i šifre: NS-Guest-PRG, PT-2026-02, SAML2 ... (bar dva dela sa velikim slovom ili cifrom)
+NAME_RE = re.compile(r"\b[A-Z0-9][A-Za-z0-9]*(?:-[A-Z0-9][A-Za-z0-9]*)+\b|\b[A-Z]{2,}[0-9]+\b")
 
 
-def claim_flags(claims: list[dict], context: str) -> list[str]:
-    """Provera bez LLM-a (alarm, ne menja ocenu):
-      number_not_in_context:i - tvrdnja i je 'supported', a neki njen broj ne postoji u kontekstu"""
-    ctx = {n.replace(",", "") for n in NUMBER_RE.findall(context)}
+def ungrounded_tokens(text: str, context: str, question: str = "") -> dict:
+    """Provera bez LLM-a: brojevi i nazivi iz teksta kojih nema ni u kontekstu ni u pitanju.
+    Hvata izmišljene šifre i nazive izvedene iz šablona (npr. NS-Guest-LIS iz NS-Guest-PRG),
+    što LLM ocenjivač ne hvata pouzdano jer ima istu slabost kao generator."""
+    ctx_nums = {n.replace(",", "") for n in NUMBER_RE.findall(context + " " + question)}
+    nums = sorted({n.replace(",", "") for n in NUMBER_RE.findall(text)} - ctx_nums)
+    names = sorted({t for t in NAME_RE.findall(text) if t not in context and t not in question})
+    return {"numbers": nums, "names": names}
+
+
+def claim_flags(claims: list[dict], context: str, question: str = "") -> list[str]:
+    """Alarm (ne menja ocenu): tvrdnja i je 'supported', a sadrži broj ili naziv kog nema u kontekstu ni pitanju."""
     flags = []
     for i, c in enumerate(claims, start=1):
-        nums = {n.replace(",", "") for n in NUMBER_RE.findall(c["claim"])}
-        if c["verdict"] == "supported" and nums - ctx:
+        bad = ungrounded_tokens(c["claim"], context, question)
+        if c["verdict"] == "supported" and bad["numbers"]:
             flags.append(f"number_not_in_context:{i}")
+        if c["verdict"] == "supported" and bad["names"]:
+            flags.append(f"name_not_in_context:{i}")
     return flags
 
 
@@ -115,7 +127,8 @@ def faithfulness_answer(row: dict, context: str, llm, version: str = FAITHFULNES
            **parsed, "judge_raw": raw, "judge_latency_s": round(time.perf_counter() - start, 2)}
     if not parsed["judge_error"]:
         out.update(score_claims(parsed["claims"]))
-        out["flags"] = claim_flags(parsed["claims"], context)
+        out["flags"] = claim_flags(parsed["claims"], context, row["question"])
+    out["ungrounded_in_answer"] = ungrounded_tokens(row["answer"], context, row["question"])
     return out
 
 
@@ -145,6 +158,8 @@ def summarize(rows: list[dict]) -> dict:
         "fully_grounded_answers": f"{sum(r['fully_grounded'] for r in scored)}/{len(scored)}",
         "not_grounded": sorted(r["id"] for r in scored if not r["fully_grounded"]),
         "flagged": sorted(r["id"] for r in ok if r.get("flags")),
+        "answers_with_ungrounded_tokens": {r["id"]: r["ungrounded_in_answer"] for r in rows
+                                           if any((r.get("ungrounded_in_answer") or {}).values())},
     }
 
 
@@ -160,14 +175,28 @@ if __name__ == "__main__":
     files = sorted(GEN_RESULTS_DIR.glob(f"*/faithfulness_{args.tag}.jsonl"))
     if not files:
         raise SystemExit(f"Nema fajlova faithfulness_{args.tag}.jsonl u {GEN_RESULTS_DIR}")
+    from chunking import load_jsonl
+    from config import DATA_PROCESSED
+    from figures import figure_chunks
+    from generate import format_context
+
+    by_id = {c["chunk_id"]: c for c in load_jsonl(DATA_PROCESSED / "chunks_section.jsonl") + figure_chunks()}
     report = {}
     for f in files:
         rows = [json.loads(line) for line in open(f, encoding="utf-8")]
+        answers = {a["id"]: a for a in map(json.loads, open(f.parent / "answers.jsonl", encoding="utf-8"))}
+        for r in rows:          # provera bez LLM-a se uvek računa iznova (i za rezultate iz starije verzije koda)
+            a = answers[r["id"]]
+            ctx = format_context([by_id[c] for c in a["context_ids"]], "labeled")
+            r["ungrounded_in_answer"] = ungrounded_tokens(a["answer"], ctx, a["question"])
+            if not r["judge_error"]:
+                r["flags"] = claim_flags(r["claims"], ctx, a["question"])
         s = report[f.parent.name] = summarize(rows)
         print(f"=== {f.parent.name}")
         print(f"  tvrdnji: {s['n_claims']}  {s['claims']}  |  prosečna verodostojnost: {s['mean_faithfulness']}"
               f"  |  potpuno utemeljeni odgovori: {s['fully_grounded_answers']}")
         print(f"  bez tvrdnji: {s['no_claims']}  |  greške ocenjivača: {s['judge_errors']}  |  alarmi: {s['flagged']}")
+        print(f"  odgovori sa brojem/nazivom kog nema u kontekstu (bez LLM-a): {s['answers_with_ungrounded_tokens'] or 'nema'}")
         if args.details:
             for r in rows:
                 for c in r.get("claims", []):

@@ -2,7 +2,7 @@
 import pytest
 
 from faithfulness import (FAITHFULNESS_PROMPTS, claim_flags, faithfulness_fingerprint, parse_claims,
-                          score_claims, summarize)
+                          score_claims, summarize, ungrounded_tokens)
 
 S, U, X = "supported", "unsupported", "contradicted"
 
@@ -33,9 +33,21 @@ def test_score_claims():
     assert score_claims([])["faithfulness"] is None
 
 
-def test_claim_flag_number_not_in_context():
-    claims = [{"claim": "The fee is 18 EUR", "verdict": S}, {"claim": "The fee is 25 EUR", "verdict": S}]
-    assert claim_flags(claims, "Badge fee | 18 EUR (charged in SGD)") == ["number_not_in_context:2"]
+def test_claim_flag_number_not_in_context_ignores_question_numbers():
+    claims = [{"claim": "For 3,200 EUR the fee is 18 EUR", "verdict": S}, {"claim": "The fee is 25 EUR", "verdict": S}]
+    assert claim_flags(claims, "Badge fee | 18 EUR (charged in SGD)", "Fee for 3,200 EUR?") == ["number_not_in_context:2"]
+
+
+def test_invented_name_from_pattern_is_caught():
+    """Regresija: ocenjivač f1 je 'NS-Guest-LIS' proglasio podržanim (postoji samo NS-Guest-PRG)."""
+    ctx = "Network: NS-Guest-PRG. Each office provides a separate guest network; names differ by office."
+    assert ungrounded_tokens("NS-Guest-LIS", ctx, "Guest Wi-Fi in Lisbon?") == {"numbers": [], "names": ["NS-Guest-LIS"]}
+    assert claim_flags([{"claim": "NS-Guest-LIS", "verdict": S}], ctx) == ["name_not_in_context:1"]
+
+
+def test_names_present_in_context_or_question_are_fine():
+    assert ungrounded_tokens("Use NS-Corp and memo PT-2026-02; e-mailing is not allowed. E-mailing too.",
+                             "NS-Corp ... Memo PT-2026-02", "")["names"] == []
 
 
 def test_summarize_excludes_answers_without_claims():
