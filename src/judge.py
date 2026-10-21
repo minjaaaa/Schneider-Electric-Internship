@@ -189,5 +189,5 @@ def judge_run(run_dir: Path, facts: dict, llm, judge_tag: str, version: str = JU
     out = Path(run_dir) / f"judge_{judge_tag}.jsonl"
     with open(out, "w", encoding="utf-8") as f:
         for row in rows:
-            f.write(json.dumps(judge_answer(row, facts[row["id"]], llm), ensure_ascii=False) + "\n")
+            f.write(json.dumps(judge_answer(row, facts[row["id"]], llm, version), ensure_ascii=False) + "\n")
     return out
