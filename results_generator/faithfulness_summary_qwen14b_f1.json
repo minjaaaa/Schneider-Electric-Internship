@@ -1,0 +1,27 @@
+{
+  "2026-10-18_1716_gen_prompt-v2b_gemma4-12b": {
+    "n_answers": 49,
+    "judge_errors": [],
+    "no_claims": [
+      "Q25",
+      "Q26",
+      "Q35"
+    ],
+    "n_claims": 72,
+    "claims": {
+      "supported": 68,
+      "unsupported": 3,
+      "contradicted": 1
+    },
+    "mean_faithfulness": 0.955,
+    "fully_grounded_answers": "42/46",
+    "not_grounded": [
+      "Q03",
+      "Q40",
+      "Q41",
+      "Q44"
+    ],
+    "flagged": [],
+    "answers_with_ungrounded_tokens": {}
+  }
+}

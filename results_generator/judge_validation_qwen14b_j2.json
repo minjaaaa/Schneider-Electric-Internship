@@ -1,0 +1,745 @@
+{
+  "tag": "qwen14b_j2",
+  "facts_file": "C:\\Users\\minja\\OneDrive\\Radna površina\\Schneider praksa\\northstar-rag\\eval\\expected_facts.json",
+  "overview": {
+    "2026-10-14_1022_gen_hybrid_qwen7b": {
+      "grades": {
+        "correct": 23,
+        "partial": 16,
+        "wrong": 10
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q39",
+        "Q40",
+        "Q41",
+        "Q49"
+      ],
+      "fact_recall": 0.669
+    },
+    "2026-10-14_2237_gen_hybrid_qwen14b": {
+      "grades": {
+        "correct": 29,
+        "partial": 16,
+        "wrong": 4
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q04",
+        "Q09",
+        "Q23"
+      ],
+      "fact_recall": 0.792
+    },
+    "2026-10-17_1833_gen_prompt-v2a_qwen7b": {
+      "grades": {
+        "correct": 20,
+        "partial": 16,
+        "wrong": 13
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q39",
+        "Q40",
+        "Q41"
+      ],
+      "fact_recall": 0.616
+    },
+    "2026-10-17_1837_gen_prompt-v2b_qwen7b": {
+      "grades": {
+        "correct": 22,
+        "partial": 17,
+        "wrong": 10
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q39",
+        "Q40",
+        "Q41"
+      ],
+      "fact_recall": 0.679
+    },
+    "2026-10-17_1845_gen_prompt-v2c_qwen7b": {
+      "grades": {
+        "correct": 26,
+        "partial": 16,
+        "wrong": 7
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q04",
+        "Q23",
+        "Q40",
+        "Q48"
+      ],
+      "fact_recall": 0.759
+    },
+    "2026-10-18_1708_gen_prompt-v1_gemma4-12b": {
+      "grades": {
+        "correct": 31,
+        "partial": 13,
+        "wrong": 4
+      },
+      "judge_errors": [
+        "Q40"
+      ],
+      "flagged": [
+        "Q39"
+      ],
+      "fact_recall": 0.831
+    },
+    "2026-10-18_1716_gen_prompt-v2b_gemma4-12b": {
+      "grades": {
+        "correct": 33,
+        "partial": 14,
+        "wrong": 2
+      },
+      "judge_errors": [],
+      "flagged": [
+        "Q23",
+        "Q39",
+        "Q43"
+      ],
+      "fact_recall": 0.848
+    }
+  },
+  "validity": {
+    "verdicts": {
+      "n": 228,
+      "agreement": 0.864,
+      "chance_agreement": 0.523,
+      "kappa": 0.715,
+      "confusion": {
+        "present": {
+          "present": 140,
+          "missing": 5,
+          "contradicted": 1
+        },
+        "missing": {
+          "present": 14,
+          "missing": 50,
+          "contradicted": 5
+        },
+        "contradicted": {
+          "present": 4,
+          "missing": 2,
+          "contradicted": 7
+        }
+      }
+    },
+    "grades": {
+      "n": 98,
+      "agreement": 0.867,
+      "chance_agreement": 0.44,
+      "kappa": 0.763,
+      "confusion": {
+        "correct": {
+          "correct": 52,
+          "partial": 2,
+          "wrong": 2
+        },
+        "partial": {
+          "correct": 3,
+          "partial": 27,
+          "wrong": 4
+        },
+        "wrong": {
+          "correct": 0,
+          "partial": 2,
+          "wrong": 6
+        }
+      }
+    },
+    "per_run": {
+      "2026-10-18_1716_gen_prompt-v2b_gemma4-12b": {
+        "n": 49,
+        "ref_correct": 33,
+        "judge_correct": 33,
+        "grade_agree": 43
+      },
+      "2026-10-17_1837_gen_prompt-v2b_qwen7b": {
+        "n": 49,
+        "ref_correct": 23,
+        "judge_correct": 22,
+        "grade_agree": 42
+      }
+    },
+    "grade_errors_by_category": {
+      "abstain": {
+        "n": 8,
+        "grade_errors": 2
+      },
+      "compare": {
+        "n": 6,
+        "grade_errors": 2
+      },
+      "confusable": {
+        "n": 18,
+        "grade_errors": 3
+      },
+      "image": {
+        "n": 16,
+        "grade_errors": 0
+      },
+      "image+override": {
+        "n": 2,
+        "grade_errors": 0
+      },
+      "multi-hop": {
+        "n": 12,
+        "grade_errors": 4
+      },
+      "override": {
+        "n": 2,
+        "grade_errors": 0
+      },
+      "rule+memo": {
+        "n": 4,
+        "grade_errors": 0
+      },
+      "superseded-trap": {
+        "n": 8,
+        "grade_errors": 0
+      },
+      "table": {
+        "n": 6,
+        "grade_errors": 0
+      },
+      "templated": {
+        "n": 2,
+        "grade_errors": 0
+      },
+      "text": {
+        "n": 8,
+        "grade_errors": 0
+      },
+      "text+image": {
+        "n": 6,
+        "grade_errors": 2
+      }
+    },
+    "grade_errors_by_answer_length": {
+      "long": {
+        "n": 67,
+        "grade_errors": 8
+      },
+      "short": {
+        "n": 31,
+        "grade_errors": 5
+      }
+    },
+    "judge_errors": [],
+    "disagreements": [
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q06",
+        "category": "confusable",
+        "short": true,
+        "ref_grade": "correct",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "Office-based NSFS employees have 1 remote day per week",
+            "ref": "present",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q24",
+        "category": "confusable",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "correct",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The limit includes drinks",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q26",
+        "category": "abstain",
+        "short": true,
+        "ref_grade": "correct",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The answer does not give a specific value or name for the dental insurance provider",
+            "ref": "present",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q31",
+        "category": "confusable",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "L3 is a career level",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q35",
+        "category": "abstain",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The answer says there is no Berlin office, or that the knowledge base has no information about one",
+            "ref": "missing",
+            "judge": "present"
+          },
+          {
+            "fact": 3,
+            "text": "The answer does not describe parking at a Berlin office",
+            "ref": "present",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q39",
+        "category": "multi-hop",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 3,
+            "text": "It is paid together with the salary",
+            "ref": "missing",
+            "judge": "contradicted"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q40",
+        "category": "multi-hop",
+        "short": false,
+        "ref_grade": "wrong",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "50% of the relocation package must be repaid",
+            "ref": "contradicted",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q41",
+        "category": "multi-hop",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 4,
+            "text": "NSFS maintains Polaris Edge",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q43",
+        "category": "text+image",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 4,
+            "text": "Courier replacement takes 3 business days",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q44",
+        "category": "text+image",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "correct",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "RESTRICTED information may never be shared externally",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+        "id": "Q45",
+        "category": "rule+memo",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The 160 EUR cap applies to stays from 1 April 2026",
+            "ref": "missing",
+            "judge": "present"
+          },
+          {
+            "fact": 5,
+            "text": "The 160 EUR cap comes from memo PT-2026-02",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q04",
+        "category": "confusable",
+        "short": false,
+        "ref_grade": "wrong",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 3,
+            "text": "Approval is by the budget owner",
+            "ref": "contradicted",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q06",
+        "category": "confusable",
+        "short": true,
+        "ref_grade": "correct",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "Office-based NSFS employees have 1 remote day per week",
+            "ref": "present",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q14",
+        "category": "abstain",
+        "short": true,
+        "ref_grade": "wrong",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The answer does not give a specific value or name for the Lisbon guest Wi-Fi",
+            "ref": "contradicted",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q26",
+        "category": "abstain",
+        "short": true,
+        "ref_grade": "correct",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The answer does not give a specific value or name for the dental insurance provider",
+            "ref": "present",
+            "judge": "missing"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q31",
+        "category": "confusable",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "L3 means Senior",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q35",
+        "category": "abstain",
+        "short": false,
+        "ref_grade": "wrong",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The answer says there is no Berlin office, or that the knowledge base has no information about one",
+            "ref": "contradicted",
+            "judge": "present"
+          },
+          {
+            "fact": 3,
+            "text": "The answer does not describe parking at a Berlin office",
+            "ref": "contradicted",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q38",
+        "category": "multi-hop",
+        "short": false,
+        "ref_grade": "wrong",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "No, a public AI chatbot may not be used to summarise a customer contract",
+            "ref": "present",
+            "judge": "contradicted"
+          },
+          {
+            "fact": 2,
+            "text": "Customer contracts are classified as CONFIDENTIAL",
+            "ref": "contradicted",
+            "judge": "missing"
+          },
+          {
+            "fact": 3,
+            "text": "Public AI tools may be used only with PUBLIC data",
+            "ref": "missing",
+            "judge": "contradicted"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q39",
+        "category": "multi-hop",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 3,
+            "text": "It is paid together with the salary",
+            "ref": "missing",
+            "judge": "contradicted"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q40",
+        "category": "multi-hop",
+        "short": true,
+        "ref_grade": "wrong",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "50% of the relocation package must be repaid",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q44",
+        "category": "text+image",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "correct",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "RESTRICTED information may never be shared externally",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q45",
+        "category": "rule+memo",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 2,
+            "text": "The 160 EUR cap applies to stays from 1 April 2026",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q46",
+        "category": "rule+memo",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "partial",
+        "verdict_diffs": [
+          {
+            "fact": 1,
+            "text": "Two memos changed the rules",
+            "ref": "missing",
+            "judge": "present"
+          },
+          {
+            "fact": 5,
+            "text": "The remote work change applies from 1 March 2026",
+            "ref": "missing",
+            "judge": "present"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q48",
+        "category": "compare",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 4,
+            "text": "The fee is charged in SGD",
+            "ref": "missing",
+            "judge": "contradicted"
+          }
+        ]
+      },
+      {
+        "run": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+        "id": "Q49",
+        "category": "compare",
+        "short": false,
+        "ref_grade": "partial",
+        "judge_grade": "wrong",
+        "verdict_diffs": [
+          {
+            "fact": 3,
+            "text": "Lisbon has 13 national holidays plus 1 municipal holiday",
+            "ref": "missing",
+            "judge": "contradicted"
+          }
+        ]
+      }
+    ]
+  },
+  "comparisons": [
+    {
+      "a": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+      "b": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+      "n_questions": 49,
+      "correct_a": 22,
+      "correct_b": 33,
+      "only_a": [
+        "Q42"
+      ],
+      "only_b": [
+        "Q04",
+        "Q07",
+        "Q09",
+        "Q10",
+        "Q14",
+        "Q20",
+        "Q24",
+        "Q33",
+        "Q37",
+        "Q38",
+        "Q46",
+        "Q49"
+      ],
+      "p": 0.0034,
+      "significant_holm_0.05": true
+    },
+    {
+      "a": "2026-10-17_1837_gen_prompt-v2b_qwen7b",
+      "b": "2026-10-17_1845_gen_prompt-v2c_qwen7b",
+      "n_questions": 49,
+      "correct_a": 22,
+      "correct_b": 26,
+      "only_a": [
+        "Q25"
+      ],
+      "only_b": [
+        "Q06",
+        "Q07",
+        "Q09",
+        "Q40",
+        "Q46"
+      ],
+      "p": 0.2188,
+      "significant_holm_0.05": false
+    },
+    {
+      "a": "2026-10-14_2237_gen_hybrid_qwen14b",
+      "b": "2026-10-18_1716_gen_prompt-v2b_gemma4-12b",
+      "n_questions": 49,
+      "correct_a": 29,
+      "correct_b": 33,
+      "only_a": [
+        "Q02",
+        "Q06",
+        "Q39",
+        "Q41",
+        "Q48"
+      ],
+      "only_b": [
+        "Q01",
+        "Q04",
+        "Q10",
+        "Q14",
+        "Q25",
+        "Q33",
+        "Q37",
+        "Q47",
+        "Q49"
+      ],
+      "p": 0.424,
+      "significant_holm_0.05": false
+    }
+  ]
+}

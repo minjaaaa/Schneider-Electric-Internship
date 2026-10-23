@@ -1,0 +1,10 @@
+{
+  "judge_model": "Qwen/Qwen2.5-14B-Instruct",
+  "faithfulness_version": "f1",
+  "faithfulness_hash": "25cfad73",
+  "context_style": "labeled",
+  "max_new_tokens": 600,
+  "runs": [
+    "2026-10-18_1716_gen_prompt-v2b_gemma4-12b"
+  ]
+}

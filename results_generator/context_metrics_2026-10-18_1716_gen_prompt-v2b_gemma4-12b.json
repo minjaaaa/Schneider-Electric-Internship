@@ -1,0 +1,450 @@
+{
+  "k": 5,
+  "n_questions": 49,
+  "n_scored": 45,
+  "summary": {
+    "all": {
+      "n": 45,
+      "context_recall": 0.981,
+      "context_precision_at_k": 0.289,
+      "average_precision": 0.799,
+      "all_sources_found": 43
+    },
+    "one_source": {
+      "n": 28,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.818,
+      "all_sources_found": 28
+    },
+    "multi_source": {
+      "n": 17,
+      "context_recall": 0.951,
+      "context_precision_at_k": 0.435,
+      "average_precision": 0.768,
+      "all_sources_found": 15
+    },
+    "missing_sources": {
+      "Q43": [
+        "Figure 4"
+      ],
+      "Q49": [
+        "8.4",
+        "8.6"
+      ]
+    }
+  },
+  "per_question": [
+    {
+      "id": "Q01",
+      "category": "table",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q02",
+      "category": "override",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q03",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q04",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.25,
+      "missing_sources": []
+    },
+    {
+      "id": "Q05",
+      "category": "image+override",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.833,
+      "missing_sources": []
+    },
+    {
+      "id": "Q06",
+      "category": "confusable",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q07",
+      "category": "text",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q08",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q09",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q10",
+      "category": "superseded-trap",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q11",
+      "category": "text",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q12",
+      "category": "superseded-trap",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q13",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q15",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.333,
+      "missing_sources": []
+    },
+    {
+      "id": "Q16",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.333,
+      "missing_sources": []
+    },
+    {
+      "id": "Q17",
+      "category": "templated",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q18",
+      "category": "superseded-trap",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q19",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q20",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q21",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q22",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q23",
+      "category": "text",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q24",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q27",
+      "category": "table",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q28",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q29",
+      "category": "text",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q30",
+      "category": "multi-hop",
+      "n_sources": 3,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.6,
+      "average_precision": 0.806,
+      "missing_sources": []
+    },
+    {
+      "id": "Q31",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q32",
+      "category": "superseded-trap",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q33",
+      "category": "confusable",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q34",
+      "category": "table",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q36",
+      "category": "image",
+      "n_sources": 1,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q37",
+      "category": "multi-hop",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q38",
+      "category": "multi-hop",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.5,
+      "missing_sources": []
+    },
+    {
+      "id": "Q39",
+      "category": "multi-hop",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.417,
+      "missing_sources": []
+    },
+    {
+      "id": "Q40",
+      "category": "multi-hop",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q41",
+      "category": "multi-hop",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.583,
+      "missing_sources": []
+    },
+    {
+      "id": "Q42",
+      "category": "text+image",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.583,
+      "missing_sources": []
+    },
+    {
+      "id": "Q43",
+      "category": "text+image",
+      "n_sources": 2,
+      "context_recall": 0.5,
+      "context_precision_at_k": 0.2,
+      "average_precision": 1.0,
+      "missing_sources": [
+        "Figure 4"
+      ]
+    },
+    {
+      "id": "Q44",
+      "category": "text+image",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.583,
+      "missing_sources": []
+    },
+    {
+      "id": "Q45",
+      "category": "rule+memo",
+      "n_sources": 3,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.6,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q46",
+      "category": "rule+memo",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.367,
+      "missing_sources": []
+    },
+    {
+      "id": "Q47",
+      "category": "compare",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 1.0,
+      "missing_sources": []
+    },
+    {
+      "id": "Q48",
+      "category": "compare",
+      "n_sources": 2,
+      "context_recall": 1.0,
+      "context_precision_at_k": 0.4,
+      "average_precision": 0.583,
+      "missing_sources": []
+    },
+    {
+      "id": "Q49",
+      "category": "compare",
+      "n_sources": 6,
+      "context_recall": 0.667,
+      "context_precision_at_k": 0.8,
+      "average_precision": 0.804,
+      "missing_sources": [
+        "8.4",
+        "8.6"
+      ]
+    }
+  ],
+  "runs_with_different_context": []
+}

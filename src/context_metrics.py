@@ -1,13 +1,15 @@
-"""Kvalitet konteksta (context precision / recall) 
+"""Kvalitet konteksta (context precision / recall)
 
 Svako pitanje u evaluacionom skupu ima označene izvore (sources: oznake sekcija i slika), a uz svaki
 sačuvan odgovor stoji lista oznaka delova dokumenta koje je pretraga donela (context, redom po rangu).
-Iz ta dva podatka metrike se računaju kao:
+Iz ta dva podatka metrike se računaju doslovno:
   context recall        - koliki deo potrebnih izvora je u kontekstu 
   context precision@k   - koliki deo od k delova konteksta je potreban (relevantni / k)
   context precision     - da li su potrebni delovi PRI VRHU liste
 
-Upotreba:  python src/context_metrics.py                
+Kontekst je u eksperimentima generisanja zamrznut, pa su metrike iste za sve generatore.
+
+Upotreba:  python src/context_metrics.py                 (bazno pokretanje Qwen 7B)
            python src/context_metrics.py <ime_foldera>
 """
 from __future__ import annotations
@@ -24,7 +26,7 @@ def context_recall(context: list[str], sources: list[str]) -> float:
 
 
 def context_precision_at_k(context: list[str], sources: list[str]) -> float:
-    """Deo delova konteksta koji su potrebni (relevantni / k); 0 ako kontekst nema delova."""
+    """Deo delova konteksta koji su potrebni (ista oznaka dva puta = dva dela, npr. dva FAQ dela)."""
     src = set(sources)
     return sum(c in src for c in context) / len(context)
 
@@ -77,7 +79,7 @@ def evaluate_run(rows: list[dict]) -> dict:
 if __name__ == "__main__":
     from config import GEN_RESULTS_DIR
 
-    run = sys.argv[1] if len(sys.argv) > 1 else "2026-10-14_1022_gen_hybrid_qwen7b"
+    run = sys.argv[1] if len(sys.argv) > 1 else "2026-10-18_1716_gen_prompt-v2b_gemma4-12b"
     run_dir = GEN_RESULTS_DIR / Path(run).name
     rows = [json.loads(line) for line in open(run_dir / "answers.jsonl", encoding="utf-8")]
     report = evaluate_run(rows)
