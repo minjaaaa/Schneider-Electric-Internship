@@ -26,36 +26,41 @@ Dokument je namerno težak za pretragu:
                    pitanje ──► pretraga (hibrid, RRF) ──► top 5 delova
                                          │
                                          ▼
-                        generate.py ──► LLM (Qwen2.5, Colab) ──► odgovor + citati + odbijanje
+                        generate.py ──► LLM (Gemma 4 12B, prompt v2b, Colab) ──► odgovor + citati + odbijanje
                                          │
                                          ▼
-               evaluate.py (pretraga)  ·  evaluate_text.py (odgovori)
+     evaluacija:  evaluate.py (pretraga)        evaluate_text.py (odgovori, bez LLM-a)
+                  context_metrics.py (kontekst) judge.py → validate_judge.py (tačnost, LLM ocenjivač)
+                                                faithfulness.py (verodostojnost prema kontekstu)
 ```
 
-## Trenutni rezultati
+## Metodologija rada
 
-**Pretraga** – evaluacioni skup od 49 pitanja (45 sa odgovorom, 4 bez odgovora; 17 traži 2–6 izvora).
+Svaki korak prati isti obrazac: **probam → analiziram rezultate → postavim pretpostavku → proverim je
+eksperimentom → pretpostavka potvrđena ili ne**. Detalji i brojevi su u nedeljnim izveštajima; ovde su
+principi koje kod i struktura projekta podržavaju.
 
-| Pretraga                     | Hit@1 (32 osnovna pitanja) | Svi izvori u top 5 (17 višeizvornih) | Vreme po pitanju |
-| ---------------------------- | -------------------------- | ------------------------------------- | ---------------- |
-| Dense                        | 0,69                       | 71%                                   | 0,4 s            |
-| Hibrid (dense + sparse, RRF) | 0,72                       | 88%                                   | 0,2 s            |
-| Dense + reranker             | 0,91                       | 88%                                   | ~14 s (CPU)      |
-
-- Na jednostavnim pitanjima hibrid ne donosi merljivo poboljšanje; na pitanjima sa više izvora dostiže reranker, a mnogo je brži.
-- Razlaganje pitanja preko LLM-a (query decomposition, eksp. 10–11) uz hibrid ne pomaže.
-
-**Generisanje** – hibridna pretraga, top 5, ručna ocena svih 49 odgovora:
-
-| Model                        | Tačno / delimično / netačno | Vreme po odgovoru (T4 GPU) |
-| ---------------------------- | ------------------------------ | -------------------------- |
-| Qwen2.5-7B-Instruct (4-bit)  | 33 / 8 / 8                     | 3,8 s                      |
-| Qwen2.5-14B-Instruct (4-bit) | 39 / 6 / 4                     | 9,3 s                      |
-
-- Od 7 netačnih odgovora 7B modela (na pitanja sa odgovorom), 6 je imalo sve potrebne izvore u kontekstu: greške pravi generator, ne pretraga.
-- Razlika 7B / 14B nije statistički pouzdana na 49 pitanja (McNemar, p ≈ 0,18).
-
-Detalji svakog pokretanja su u `results/`.
+- **Jedna promena po eksperimentu.** Pretraga i generisanje mere se odvojeno. Za poređenje generatora
+  kontekst je *zamrznut*: svaki model dobija iste delove dokumenta (`BASE_RUN`), pa razlika potiče samo
+  od prompta ili modela. Verzije prompta dodaju po jednu grupu izmena (ablacija).
+- **Ponovljivost.** Generisanje bez nasumičnosti (greedy); kontrolno pokretanje mora ponoviti bazni
+  izlaz; svaki prompt (generator, ocenjivač) ima verziju i heš u konfiguraciji pokretanja; rezultati
+  svakog pokretanja u sopstvenom folderu sa `run_config.json`.
+- **Automatska ocena umesto ručne.** Očekivani odgovori su razloženi na atomske činjenice; LLM ocenjivač
+  odgovara samo na usko pitanje „da li je činjenica prisutna“, a ocenu izvodi pravilo u kodu – isti
+  kriterijum za sve modele.
+- **Ocenjivač je merni instrument – validira se.** Pouzdanost (dva prolaza daju isto), valjanost
+  (slaganje sa ljudskom referencom po *istoj* rubrici, Cohen's kappa) i pristrasnost (sistematske
+  greške po modelu, dužini odgovora, kategoriji). Validacija se ponavlja pri svakoj promeni ocenjivača.
+- **Kontrolni primeri.** Pre punog ocenjivanja ocenjivač se proverava na odgovoru poznatog ishoda;
+  rezultat se gleda pre tumačenja brojeva.
+- **Provere bez LLM-a gde je moguće.** Kvalitet konteksta iz označenih izvora; izmišljeni brojevi i
+  nazivi proveravaju se doslovnim poklapanjem sa izvorima – LLM ocenjivač može imati istu slabost kao
+  generator.
+- **Statistika.** Poređenja sistema planirana unapred; egzaktni McNemar na istim pitanjima i Holm
+  korekcija za više poređenja. „Nije značajno“ znači „razlika nije pokazana“.
+- **Automatski testovi.** Parsiranje, pravila ocene, statistika, metrike i celovitost podataka – bez
+  GPU-a i LLM-a, pre svakog commit-a; svaka pronađena greška dobija regresioni test.
 
 ## Struktura
 
@@ -66,25 +71,38 @@ northstar-rag/
 │   └── processed/                     # generisano; u git-u samo ulazi potrebni za ponovljivost:
 │                                      #   chunks_section.jsonl, figures/figures.json,
 │                                      #   figure_descriptions_*.json, decompose_*.json
-├── eval/eval_questions.json           # 49 pitanja: question, expected_answer, sources, category
+├── eval/
+│   ├── eval_questions.json            # 49 pitanja: question, expected_answer, sources, category
+│   ├── expected_facts.json            # očekivani odgovori razloženi na atomske činjenice (core / dodatne)
+│   └── judge_validation/
+│       └── human_verdicts.jsonl       # referenca za validaciju ocenjivača (verdikti po činjenicama)
 ├── notebooks/
 │   ├── 01_explore_document.ipynb
 │   ├── 02_chunks.ipynb
 │   ├── 03_experiments.ipynb           # analiza rezultata pretrage
-│   └── 04_generation.ipynb            # generisanje odgovora u Google Colab-u (GPU)
-├── results/                           # jedan folder po pokretanju: <datum_vreme>_<ime>/
+│   ├── 04_generation.ipynb            # generisanje odgovora (Colab, GPU)
+│   ├── 05_prompt_versions.ipynb       # verzije prompta i modeli na zamrznutom kontekstu (Colab)
+│   ├── 06_judge.ipynb                 # LLM ocenjivač tačnosti nad sačuvanim odgovorima (Colab)
+│   └── 07_faithfulness.ipynb          # LLM ocena verodostojnosti izabranog sistema (Colab)
+├── results/                           # pretraga: jedan folder po pokretanju <datum_vreme>_<ime>/
+├── results_generator/                 # generisanje: <datum_vreme>_gen_<ime>/ sa answers.jsonl,
+│                                      #   run_config.json, judge_<tag>.jsonl, faithfulness_<tag>.jsonl
 ├── src/
 │   ├── config.py                      # putanje, modeli, parametri, memoi koji menjaju sekcije (OVERRIDES)
 │   ├── parse.py                       # .docx → Markdown (Docling) + slike sa naslovima
 │   ├── chunking.py                    # chunking (fiksna dužina / po sekcijama) i metapodaci
 │   ├── figures.py                     # opisi slika preko Gemini API-ja (keš po modelu)
-│   ├── indexing.py                    # BGE-M3 dense + sparse, Qdrant, hibridna i višeupitna pretraga,
-│   │                                  #   čuvanje indeksa (otisak chunk-ova u imenu kolekcije)
+│   ├── indexing.py                    # BGE-M3 dense + sparse, Qdrant, hibridna i višeupitna pretraga
 │   ├── retrieval.py                   # proširenje (memoi, slike) i reranker
 │   ├── decompose.py                   # razlaganje pitanja na podpitanja (Gemini, grupno, keširano)
 │   ├── evaluate.py                    # metrike pretrage i eksperimenti 1–11
-│   ├── generate.py                    # prompt, kontekst sa statusom izvora, HF model, JSON odgovor
-│   └── evaluate_text.py               # metrike odgovora bez LLM-a
+│   ├── generate.py                    # verzije prompta (v1–v2c, heš), kontekst, HF model (Qwen / Gemma 4)
+│   ├── evaluate_text.py               # metrike odgovora bez LLM-a
+│   ├── context_metrics.py             # context precision / recall iz označenih izvora
+│   ├── judge.py                       # LLM ocenjivač tačnosti po činjenicama (prompt j1 / j2)
+│   ├── validate_judge.py              # validacija ocenjivača: ponovljivost, kappa, pristrasnost, McNemar + Holm
+│   └── faithfulness.py                # verodostojnost: tvrdnje prema kontekstu + provera brojeva i naziva
+├── tests/                             # pytest, bez GPU-a i LLM-a
 ├── .env.example                       # šablon za ključeve (kopirati u .env)
 ├── requirements.txt
 └── setup.ps1                          # podešavanje okruženja na Windowsu
@@ -99,6 +117,7 @@ northstar-rag/
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned   # jednom, ako aktivacija ne radi
 .\.venv\Scripts\Activate.ps1
 copy .env.example .env                        # pa upisati ključeve
+pip install pytest                            # za testove (ako nije u requirements.txt)
 ```
 
 ## API ključevi
@@ -108,7 +127,8 @@ U `.env` (nikad u kod, notebook ili commit – repo je javan):
 - `GEMINI_API_KEY` – opisi slika (`figures.py`) i razlaganje pitanja (`decompose.py`), besplatni nivo;
 - `HF_TOKEN` – preuzimanje modela sa Hugging Face-a.
 
-U Colab-u se `HF_TOKEN` unosi preko **Secrets** (ikonica ključa), ne u ćeliju.
+U Colab-u se `HF_TOKEN` unosi preko **Secrets** (ikonica ključa), ne u ćeliju. Za Gemma 4 je potrebno
+jednom prihvatiti uslove korišćenja na stranici modela, istim nalogom.
 
 Besplatni Gemini ima dnevne kvote po modelu (npr. 20 zahteva dnevno za Flash modele), pa se svi
 LLM pozivi keširaju; `decompose.py` šalje 10 pitanja po zahtevu.
@@ -134,19 +154,42 @@ python src/evaluate.py --only 4_figures 8_hybrid     # samo navedeni (spisak: --
 Indeksi se čuvaju u `qdrant_data/` i prave ponovo samo kad se promene delovi dokumenta.
 Eksperimenti sa rerankerom (6, 9) su spori na CPU-u (~10–15 s po pitanju).
 
-**Generisanje odgovora** (Google Colab, T4 GPU): otvoriti `notebooks/04_generation.ipynb`,
-u ćeliji sa podešavanjima izabrati `GEN_MODEL` i `RUN_NAME`, pa *Run all*. Rezultat
-(`answers.jsonl`, `run_config.json`) se preuzima i raspakuje u `results/`.
+**Generisanje i ocenjivanje** (Google Colab, T4 GPU). Colab klonira repo sa GitHub-a, pa izmene
+moraju biti push-ovane pre pokretanja. Svaki notebook ima ćeliju *Podešavanja* i kontrolnu probu na
+jednom odgovoru – pokrenuti je i proveriti pre punog pokretanja. Rezultati se posle svakog pokretanja
+kopiraju na Google Drive, pa preživljavaju prekid sesije.
 
-**Evaluacija odgovora** (lokalno):
+| Notebook                   | Šta radi                                                               | Podešavanja                                 |
+| -------------------------- | ---------------------------------------------------------------------- | ------------------------------------------- |
+| `04_generation.ipynb`      | generisanje sa novom pretragom                                         | `GEN_MODEL`, `RUN_NAME`                     |
+| `05_prompt_versions.ipynb` | generisanje na zamrznutom kontekstu (`BASE_RUN`), više verzija prompta | `GEN_MODEL`, `VERSIONS`, `MODEL_TAG`        |
+| `06_judge.ipynb`           | ocena tačnosti sačuvanih odgovora                                      | `JUDGE_MODEL`, `JUDGE_VERSION`, `JUDGE_TAG` |
+| `07_faithfulness.ipynb`    | ocena verodostojnosti izabranog sistema                                | `JUDGE_MODEL`, `FAITH_VERSION`, `TAG`       |
+
+Za Gemma 4 kao generator ili ocenjivač: `multimodal=True` (`MULTIMODAL = True`).
+
+**Evaluacija** (lokalno, bez GPU-a):
 
 ```powershell
-python src/evaluate_text.py                                    # najnovije generisanje
-python src/evaluate_text.py 2026-10-14_1022_gen_hybrid_qwen7b  # određeno pokretanje
+python src/evaluate_text.py <folder_pokretanja>       # metrike odgovora bez LLM-a
+python src/context_metrics.py                         # kvalitet konteksta (izabrani sistem)
+
+# ocene iz Colab zipa raspoređuje u foldere pokretanja, validira ocenjivača i poredi sisteme
+python src/validate_judge.py --tag qwen14b_j2 --import "<raspakovani zip>"
+python src/validate_judge.py --tag qwen14b_j2 --compare-tag <drugi_prolaz> `
+       --pairs v2b_qwen7b:v2b_gemma4-12b v2b_qwen7b:v2c_qwen7b gen_hybrid_qwen14b:v2b_gemma4-12b
+
+python src/faithfulness.py --tag qwen14b_f1 --details # verodostojnost + provera brojeva i naziva
 ```
 
-Ako u folderu pokretanja postoji `manual_grades.csv` (`id, manual_grade, note`), dobija se i
-tabela „ručna ocena × pokrivenost izvora“ (greške pretrage naspram grešaka generisanja).
+Parovi u `--pairs` mogu se zadati krajem imena foldera. Izveštaji se upisuju u `results_generator/`
+(`judge_validation_<tag>.json`, `faithfulness_summary_<tag>.json`, `context_metrics_<pokretanje>.json`).
+
+**Testovi** (pre svakog commit-a):
+
+```powershell
+python -m pytest -q tests
+```
 
 ## Eksperimenti
 
@@ -168,7 +211,17 @@ tabela „ručna ocena × pokrivenost izvora“ (greške pretrage naspram greša
 | `10_decomp`              | pitanje + podpitanja (LLM), dense, RRF – porediti sa 4                     |
 | `11_decomp_hybrid`       | pitanje + podpitanja (LLM), hibrid, RRF – porediti sa 8                    |
 
-**Generisanje** (`04_generation.ipynb`): `gen_hybrid_qwen7b`, `gen_hybrid_qwen14b` – pretraga kao eksp. 8, top 5.
+**Generisanje** (`generate.py`, notebook 05) – svaka verzija prompta dodaje jednu grupu izmena:
+
+| Verzija | Šta se menja                                                                                           |
+| ------- | ------------------------------------------------------------------------------------------------------- |
+| `v1`    | bazni prompt (kontrola ponovljivosti)                                                                   |
+| `v2a`   | format: oznaka izvora bez rednog broja bloka, citira se oznaka, stroži JSON                             |
+| `v2b`   | + pravila: doslovne vrednosti, memo menja samo ono što imenuje, red i kolona tabele, svaki deo pitanja |
+| `v2c`   | + dokazi (evidence) pre odgovora                                                                        |
+
+Modeli: Qwen2.5-7B-Instruct (v1–v2c), Qwen2.5-14B-Instruct (v1), Gemma 4 12B (v1, v2b). Heš svakog
+prompta se upisuje u `run_config.json`.
 
 ## Metrike
 
@@ -179,10 +232,31 @@ tabela „ručna ocena × pokrivenost izvora“ (greške pretrage naspram greša
 - cover_rank – pozicija poslednjeg potrebnog izvora (koliki k je potreban);
 - superseded@5, words@5, latencija; `multi_source.csv` – samo pitanja sa 2+ izvora.
 
-**Odgovori** (`evaluate_text.py`, bez LLM-a):
+**Kontekst** (`context_metrics.py`, bez LLM-a): context recall, context precision@k i precision po
+rangu (average precision), na nivou označenih izvora. Kontekst je u eksperimentima generisanja
+zamrznut, pa su vrednosti iste za sve generatore (skript to proverava).
+
+**Odgovori, bez LLM-a** (`evaluate_text.py`):
 
 - tačno odbijanje (abstain recall) i pogrešno odbijanje (false abstain rate);
 - izmišljeni brojevi (unsupported numbers) – broj u odgovoru kog nema u datim izvorima;
 - preciznost i odziv citata (citation precision / recall);
-- poklapanje brojeva sa očekivanim odgovorom (number recall) – grub signal;
-- pokrivenost izvora u kontekstu (context coverage).
+- poklapanje brojeva sa očekivanim odgovorom (number recall) – grub signal.
+
+**Tačnost odgovora** (`judge.py`, LLM ocenjivač): ocenjivač za svaku činjenicu iz
+`expected_facts.json` kaže *present* / *missing* / *contradicted*; ocena se izvodi pravilom u kodu –
+netačno ako je ključna činjenica u suprotnosti ili nijedna nije prisutna, tačno ako su sve ključne
+prisutne i ništa nije u suprotnosti, inače delimično. Uz to: odziv činjenica i provera doslednosti
+bez LLM-a (alarm za verovatne greške ocenjivača).
+
+**Validacija ocenjivača** (`validate_judge.py`): ponovljivost između dva prolaza; Cohen's kappa i
+matrice neslaganja prema referenci po istoj rubrici; broj tačnih po modelu prema referenci i greške
+po dužini odgovora i kategoriji (pristrasnost); egzaktni McNemar sa Holm korekcijom za poređenje
+sistema. Ponavlja se pri svakoj promeni ocenjivača ili činjenica.
+
+**Verodostojnost** (`faithfulness.py`): LLM razloži odgovor na tvrdnje i oceni svaku prema kontekstu
+(*supported* / *unsupported* / *contradicted*); nezavisno od LLM-a, brojevi i nazivi iz odgovora koji
+se ne javljaju ni u kontekstu ni u pitanju označavaju se kao izmišljeni.
+
+**Relevantnost odgovora** (answer relevancy) nije implementirana: tačnost po činjenicama već meri da li
+je odgovor dat na postavljeno pitanje; relevantnost je sledeći korak za upotrebu bez očekivanih odgovora.
